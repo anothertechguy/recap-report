@@ -118,6 +118,10 @@
     animation: ticker-scroll 40s linear infinite;
   }
 
+  .stock-ticker-scroll {
+    animation: ticker-scroll 60s linear infinite;
+  }
+
   .ken-burns-img {
     transition: transform 8s cubic-bezier(0.2, 0.8, 0.2, 1);
   }
