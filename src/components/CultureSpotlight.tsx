@@ -22,18 +22,20 @@ const CultureSpotlight = ({ article }: CultureSpotlightProps) => {
       ref={ref}
       className="relative py-20 md:py-32 overflow-hidden"
     >
-      {/* Parallax bg */}
-      <motion.div className="absolute inset-0" style={{ y: bgY }}>
+      {/* Parallax bg — GPU promoted */}
+      <motion.div className="absolute inset-0" style={{ y: bgY, willChange: "transform" }}>
         <img
           src={article.image}
           alt=""
           className="w-full h-[130%] object-cover"
+          loading="lazy"
         />
       </motion.div>
-      <div className="absolute inset-0 bg-accent/85 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-black/85" />
 
       {/* Accent lines */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-primary/50 to-transparent" />
+      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary via-primary/50 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-l from-primary via-primary/50 to-transparent" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -48,12 +50,23 @@ const CultureSpotlight = ({ article }: CultureSpotlightProps) => {
             </span>
           </motion.div>
 
+          {/* Decorative quote marks */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 0.08 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-headline text-[20rem] font-black text-white select-none pointer-events-none leading-none"
+          >
+            "
+          </motion.div>
+
           <motion.blockquote
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-headline text-2xl md:text-4xl lg:text-5xl font-black text-accent-foreground leading-[1.1] italic"
+            className="font-headline text-2xl md:text-4xl lg:text-5xl font-black text-white leading-[1.1] italic relative z-10"
           >
             "{article.excerpt}"
           </motion.blockquote>
@@ -65,13 +78,17 @@ const CultureSpotlight = ({ article }: CultureSpotlightProps) => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-8 flex flex-col items-center gap-4"
           >
-            <div className="w-12 h-px bg-primary" />
-            <p className="text-accent-foreground/60 font-body text-sm uppercase tracking-widest">
+            <motion.div
+              animate={{ scaleX: [0.5, 1, 0.5] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="w-16 h-[2px] bg-primary"
+            />
+            <p className="text-white/50 font-body text-sm uppercase tracking-widest">
               {article.author.name} — {article.category}
             </p>
             <Link
               to={`/article/${article.slug}`}
-              className="inline-flex items-center gap-2 mt-2 px-6 py-3 rounded-full border-2 border-primary text-primary text-sm font-semibold font-body uppercase tracking-wider hover:bg-primary hover:text-primary-foreground transition-all duration-300 group"
+              className="inline-flex items-center gap-2 mt-2 px-6 py-3 rounded-full border-2 border-primary text-primary text-sm font-semibold font-body uppercase tracking-wider hover:bg-primary hover:text-white transition-all duration-300 group"
             >
               Read the Story
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-1" />

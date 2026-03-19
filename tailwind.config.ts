@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         headline: ['Fraunces', 'Georgia', 'serif'],
-        body: ['Geist', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        body: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

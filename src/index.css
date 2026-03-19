@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,800;9..144,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,22 +10,22 @@
     --background: 0 0% 100%;
     --foreground: 0 0% 4%;
 
-    --card: 210 20% 98%;
+    --card: 0 0% 99%;
     --card-foreground: 0 0% 4%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 4%;
 
-    --primary: 347 77% 50%;
+    --primary: 0 78% 50%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 98%;
+    --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 4%;
 
-    --muted: 210 20% 96%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 0 0% 0%;
+    --accent: 0 0% 3%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -32,18 +33,17 @@
 
     --border: 0 0% 90%;
     --input: 0 0% 90%;
-    --ring: 347 77% 50%;
+    --ring: 0 78% 50%;
 
-    --radius: 1.5rem;
+    --radius: 1rem;
 
-    /* Custom tokens */
-    --surface: 210 25% 97%;
-    --shadow-card: 0 0 0 1px rgba(0,0,0,.04), 0 20px 50px -10px rgba(0,0,0,.08), 0 10px 30px -15px rgba(0,0,0,.04);
-    --shadow-card-hover: 0 0 0 1px rgba(0,0,0,.06), 0 30px 60px -10px rgba(0,0,0,.14), 0 15px 40px -15px rgba(0,0,0,.08);
+    --surface: 0 0% 97%;
+    --shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 8px 24px -4px rgba(0,0,0,.08);
+    --shadow-card-hover: 0 4px 12px rgba(0,0,0,.1), 0 20px 48px -8px rgba(0,0,0,.15);
     --shadow-ticker: 0 2px 20px rgba(0,0,0,.3);
 
     --font-headline: 'Fraunces', Georgia, serif;
-    --font-body: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -52,17 +52,17 @@
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 0 78% 50%;
   }
 
   .dark {
     --background: 0 0% 4%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 7%;
+    --card: 0 0% 6%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 7%;
+    --popover: 0 0% 6%;
     --popover-foreground: 0 0% 98%;
-    --primary: 347 77% 50%;
+    --primary: 0 78% 50%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 12%;
     --secondary-foreground: 0 0% 98%;
@@ -74,15 +74,15 @@
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 18%;
     --input: 0 0% 18%;
-    --ring: 347 77% 50%;
+    --ring: 0 78% 50%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary: 0 78% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-ring: 0 78% 50%;
   }
 }
 
@@ -103,6 +103,16 @@
     letter-spacing: -0.03em;
     text-wrap: balance;
   }
+
+  ::selection {
+    background: hsl(0 78% 50% / 0.2);
+    color: hsl(0, 0%, 4%);
+  }
+
+  /* GPU-promote elements that animate frequently */
+  img {
+    content-visibility: auto;
+  }
 }
 
 @layer components {
@@ -114,34 +124,43 @@
     box-shadow: var(--shadow-card-hover);
   }
 
+  /* Ticker uses GPU-accelerated transform */
   .ticker-scroll {
     animation: ticker-scroll 40s linear infinite;
+    will-change: transform;
   }
 
   .stock-ticker-scroll {
     animation: ticker-scroll 60s linear infinite;
+    will-change: transform;
   }
 
+  /* Ken-burns — only runs on hover, GPU-promoted */
   .ken-burns-img {
-    transition: transform 8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   .ken-burns-img:hover,
   .group:hover .ken-burns-img {
-    transform: scale(1.12);
+    transform: scale(1.06) translateZ(0);
   }
 
+  /* 3D card — GPU-promoted */
   .article-card-3d {
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: transform;
+    transform: translateZ(0);
   }
 
   .article-card-3d:hover {
-    transform: translateY(-8px) scale(1.015) perspective(1000px) rotateX(1deg);
+    transform: translateY(-6px) translateZ(0);
     box-shadow: var(--shadow-card-hover);
   }
 
   .category-tag {
-    @apply text-xs font-medium uppercase tracking-widest;
+    @apply text-xs font-semibold uppercase tracking-[0.12em];
     font-family: var(--font-body);
     color: hsl(var(--primary));
   }
@@ -158,6 +177,72 @@
 
   .headline-link:hover {
     background-size: 100% 2px;
+  }
+
+  /* Glass card — simplified blur for performance */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .dark .glass-card {
+    background: rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Red accent stripe */
+  .red-stripe {
+    position: relative;
+  }
+
+  .red-stripe::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: hsl(var(--primary));
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .red-stripe:hover::before {
+    transform: scaleY(1);
+  }
+
+  /* Drop cap */
+  .drop-cap::first-letter {
+    float: left;
+    font-family: var(--font-headline);
+    font-size: 4.5em;
+    line-height: 0.8;
+    font-weight: 800;
+    margin-right: 0.08em;
+    margin-top: 0.05em;
+    color: hsl(var(--primary));
+  }
+
+  /* Divider glow */
+  .divider-glow {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.6), transparent);
+  }
+
+  /* Reading progress bar — GPU-promoted */
+  .reading-progress {
+    transform-origin: left;
+    background: hsl(var(--primary));
+    height: 3px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    will-change: transform;
   }
 }
 

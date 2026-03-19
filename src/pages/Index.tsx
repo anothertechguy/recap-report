@@ -8,15 +8,28 @@ import FeaturedCarousel from "@/components/FeaturedCarousel";
 import ArticleCard from "@/components/ArticleCard";
 import SectionDivider from "@/components/SectionDivider";
 import CultureSpotlight from "@/components/CultureSpotlight";
+import MoreStories from "@/components/MoreStories";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import Footer from "@/components/Footer";
 
 const Index = () => {
+  // Hero: article 0
   const featuredArticle = articles[0];
-  const carouselArticles = articles.slice(0, 5);
-  const latestArticles = articles.slice(1, 5);
-  const spotlightArticle = articles[2];
-  const moreArticles = articles.slice(5);
+
+  // Carousel: articles 1-5
+  const carouselArticles = articles.slice(1, 6);
+
+  // Latest Reports section: articles 6-7
+  const latestArticles = articles.slice(6, 8);
+
+  // Trending sidebar: articles 8-11
+  const trendingArticles = articles.slice(8, 12);
+
+  // Culture Spotlight: article 12
+  const spotlightArticle = articles[12];
+
+  // More Stories: rest of articles (13+), curated across categories
+  const moreArticles = articles.slice(13);
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,14 +64,14 @@ const Index = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="rounded-[2rem] bg-card shadow-card p-6 md:p-8"
+                className="rounded-2xl bg-card shadow-card p-6 md:p-8"
               >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
                   <h3 className="text-xs font-bold uppercase tracking-[0.15em] text-primary font-body">Trending Now</h3>
                 </div>
                 <div className="space-y-1 divide-y divide-border">
-                  {latestArticles.map((article, i) => (
+                  {trendingArticles.map((article, i) => (
                     <ArticleCard key={article.id} article={article} index={i} variant="compact" />
                   ))}
                 </div>
@@ -71,18 +84,8 @@ const Index = () => {
       {/* Culture Spotlight — Full bleed editorial moment */}
       <CultureSpotlight article={spotlightArticle} />
 
-      {/* More Stories — Card grid */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-6">
-          <SectionDivider title="More Stories" subtitle="Explore what's shaping the culture" />
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {moreArticles.map((article, i) => (
-              <ArticleCard key={article.id} article={article} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* More Stories — Topic toggle + thumbnail columns */}
+      <MoreStories articles={moreArticles} />
 
       <NewsletterSignup />
       <Footer />

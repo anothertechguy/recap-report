@@ -1,13 +1,45 @@
 import { useParams, Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeft, Mail, Clock, Calendar } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowLeft, Mail, Clock, Calendar, Share2, Link2, ArrowUpRight } from "lucide-react";
+import { useState, useEffect } from "react";
 import { articles } from "@/lib/articles";
 import Masthead from "@/components/Masthead";
 import Footer from "@/components/Footer";
+import ArticleCard from "@/components/ArticleCard";
 
 const ArticlePage = () => {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
+  const [copied, setCopied] = useState(false);
+
+  // Reading progress
+  const { scrollYProgress } = useScroll();
+  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
+  // Related stories — same category, excluding current
+  const related = article
+    ? articles
+        .filter((a) => a.id !== article.id && a.categories.some((c) => article.categories.includes(c)))
+        .slice(0, 3)
+    : [];
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleShareTwitter = () => {
+    if (!article) return;
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(article.title);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
+  };
+
+  // Scroll to top on article change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   if (!article) {
     return (
@@ -22,12 +54,18 @@ const ArticlePage = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Reading progress bar */}
+      <motion.div
+        className="reading-progress"
+        style={{ scaleX }}
+      />
+
       <Masthead />
 
       {/* Back link */}
       <div className="container mx-auto px-6 pt-8">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors font-body">
-          <ArrowLeft size={16} />
+        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors font-body group">
+          <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
           Back to Reports
         </Link>
       </div>
@@ -39,12 +77,15 @@ const ArticlePage = () => {
         transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
         className="container mx-auto px-6 mt-6"
       >
-        <div className="rounded-3xl overflow-hidden shadow-card p-2 bg-card">
-          <div className="overflow-hidden rounded-2xl aspect-[21/9]">
+        <div
+          className="rounded-2xl overflow-hidden shadow-card bg-card transition-transform duration-700 hover:shadow-card-hover"
+          style={{ perspective: "1000px" }}
+        >
+          <div className="overflow-hidden aspect-[21/9] group">
             <img
               src={article.image}
               alt={article.title}
-              className="w-full h-full object-cover ken-burns-img"
+              className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
             />
           </div>
         </div>
@@ -69,34 +110,56 @@ const ArticlePage = () => {
           <span className="flex items-center gap-1.5"><Clock size={14} />{article.readTime}</span>
         </div>
 
-        {/* Author */}
-        <div className="flex items-center gap-4 mt-8 pb-8 border-b border-border">
-          <div className="relative">
-            <img
-              src={article.author.avatar}
-              alt={article.author.name}
-              className="w-12 h-12 rounded-full object-cover"
-              style={{ boxShadow: '0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary))' }}
-            />
+        {/* Author + Share */}
+        <div className="flex items-center justify-between gap-4 mt-8 pb-8 border-b border-border">
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <img
+                src={article.author.avatar}
+                alt={article.author.name}
+                className="w-12 h-12 rounded-full object-cover ring-2 ring-background ring-offset-2 ring-offset-primary"
+              />
+            </div>
+            <div>
+              <p className="font-body font-semibold text-foreground text-sm">{article.author.name}</p>
+              <a
+                href={`mailto:${article.author.email}`}
+                className="text-xs text-muted-foreground hover:text-primary transition-colors font-body underline underline-offset-2"
+              >
+                <Mail size={12} className="inline mr-1" />
+                {article.author.email}
+              </a>
+            </div>
           </div>
-          <div>
-            <p className="font-body font-semibold text-foreground text-sm">{article.author.name}</p>
-            <a
-              href={`mailto:${article.author.email}`}
-              className="text-xs text-muted-foreground hover:text-primary transition-colors font-body underline underline-offset-2"
+
+          {/* Share buttons */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleCopyLink}
+              className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all"
+              title="Copy link"
             >
-              <Mail size={12} className="inline mr-1" />
-              {article.author.email}
-            </a>
+              <Link2 size={14} />
+            </button>
+            <button
+              onClick={handleShareTwitter}
+              className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all"
+              title="Share on X"
+            >
+              <Share2 size={14} />
+            </button>
+            {copied && (
+              <span className="text-xs text-primary font-body font-medium animate-fade-in">Copied!</span>
+            )}
           </div>
         </div>
 
         {/* Body */}
-        <div className="mt-10 font-body text-foreground leading-[1.8] text-base md:text-lg max-w-[65ch] space-y-6">
+        <div className="mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6">
           <p className="text-xl md:text-2xl font-headline font-medium leading-relaxed text-foreground/90">
             {article.excerpt}
           </p>
-          <p>
+          <p className="drop-cap">
             In an era where media landscapes shift daily and platforms rise and fall with algorithmic whims, there are those who choose to build differently. Not faster, not louder — but deeper. With intention. With community at the center of every decision.
           </p>
           <p>
@@ -105,7 +168,7 @@ const ArticlePage = () => {
           <p>
             The journey hasn't been without its challenges. In fact, the obstacles have been the very things that shaped the mission — turning setbacks into stepping stones, and criticism into fuel for innovation.
           </p>
-          <blockquote className="border-l-4 border-primary pl-6 py-2 my-8 italic text-lg text-foreground/80 font-headline">
+          <blockquote className="border-l-4 border-primary pl-6 py-4 my-10 italic text-xl md:text-2xl text-foreground/80 font-headline leading-snug">
             "We're not just building a platform. We're building a legacy. And legacies aren't built on shortcuts."
           </blockquote>
           <p>
@@ -121,13 +184,31 @@ const ArticlePage = () => {
           <span className="text-xs text-muted-foreground font-body uppercase tracking-widest">Filed under</span>
           <div className="flex flex-wrap gap-2 mt-3">
             {article.categories.map((cat) => (
-              <span key={cat} className="px-3 py-1 rounded-full bg-secondary text-secondary-foreground text-xs font-body font-medium">
+              <span key={cat} className="px-3 py-1.5 rounded-full bg-secondary text-secondary-foreground text-xs font-body font-medium hover:bg-primary hover:text-white transition-colors cursor-default">
                 {cat}
               </span>
             ))}
           </div>
         </div>
       </motion.article>
+
+      {/* Related Stories */}
+      {related.length > 0 && (
+        <section className="border-t border-border">
+          <div className="container mx-auto px-6 py-16 md:py-24">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="w-3 h-3 rounded-full bg-primary" />
+              <h2 className="font-headline text-2xl md:text-3xl font-bold text-foreground">Related Stories</h2>
+              <div className="flex-1 h-px bg-gradient-to-r from-primary/40 via-border to-transparent" />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+              {related.map((a, i) => (
+                <ArticleCard key={a.id} article={a} index={i} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
