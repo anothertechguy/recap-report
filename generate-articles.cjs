@@ -19,36 +19,62 @@ const processFile = (file, cat) => {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const markdown = data.data.markdown;
     
-    // Robust regex matching: Image URL, Title, Date, Excerpt, Article URL
-    const regex = /\[!\[[^\]]*\]\(([^)]+)\)\*\*(.*?)\*\*[\s\S]*?(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}[\s\S]*?\n\n?([\s\S]*?)\[…\][\s\S]*?Read more\]\(([^)]+)\)/g;
+    // Split by Read more]( to find all articles
+    const chunks = markdown.split('Read more](');
     
-    let match;
-    while ((match = regex.exec(markdown)) !== null) {
-      let [_, image, title, month, excerptRaw, link] = match;
-      
-      // Extract the full date line using an inner match since the month was captured
-      const dateString = Array.from(match[0].matchAll(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/g))[0][0];
-      
-      const slugMatch = link.match(/therecapreport\.com\/(.*?)\/?$/);
-      const slug = slugMatch ? slugMatch[1] : link;
-      
-      // clean excerpt
-      let excerpt = excerptRaw.replace(/\\\\/g, '').replace(/\\/g, '').replace(/\n/g, ' ').trim() + "...";
-      // fix any leading artifacts in excerpt
-      excerpt = excerpt.replace(/^[^\w]+/, '');
-      
-      if (!articlesMap.has(title)) {
-        articlesMap.set(title, {
-          title: title.trim(),
-          image: image.trim(),
-          date: dateString.trim(),
-          excerpt: excerpt.trim(),
-          slug,
-          link,
-          category: cat,
-          categories: [cat]
-        });
-      }
+    // The last chunk doesn't have an article before it
+    for (let i = 0; i < chunks.length - 1; i++) {
+       const block = chunks[i];
+       // The link is at the start of chunks[i+1] up to the first ')'
+       const linkMatch = chunks[i+1].split(')')[0];
+       
+       // Now parse the block
+       // It looks like: ... [![](IMAGE_URL)**TITLE** \\\\\nDATE\\\\\n\\\\\nEXCERPT \[…\]\\\\\n\\\\\n
+       const titleSplit = block.split(')**');
+       if (titleSplit.length < 2) continue;
+       
+       const imgMatch = titleSplit[titleSplit.length - 2].split('[![](').pop();
+       
+       const afterTitle = titleSplit[titleSplit.length - 1];
+       const dateSplit = afterTitle.split('**');
+       if (dateSplit.length < 2) continue;
+       
+       const title = dateSplit[0].trim();
+       const rest = dateSplit[1];
+       
+       // rest looks like: " \\\\\nFebruary 23, 2026\\\\\n\\\\\nThere are moments..."
+       const lines = rest.split('\\\\\n').map(s => s.trim()).filter(Boolean);
+       
+       let date = "";
+       let excerptRaw = "";
+       
+       for (const line of lines) {
+         if (line.match(/(January|February|March|April|May|June|July|August|September|October|November|December)/)) {
+           date = line;
+         } else if (line.length > 20 && !line.includes('[![](')) {
+           excerptRaw = line;
+           break;
+         }
+       }
+       
+       let excerpt = excerptRaw.replace(/\\[\[\]…]+$/g, '').trim();
+       if (!excerpt.endsWith('...')) excerpt += '...';
+       
+       const slugMatch = linkMatch.match(/therecapreport\.com\/(.*?)\/?$/);
+       const slug = slugMatch ? slugMatch[1] : linkMatch;
+       
+       if (!articlesMap.has(title)) {
+         articlesMap.set(title, {
+            title,
+            image: imgMatch,
+            date,
+            excerpt,
+            slug,
+            link: linkMatch,
+            category: cat,
+            categories: [cat]
+         });
+       }
     }
   } catch (err) {
     console.error(`Error reading ${file}:`, err);
@@ -64,34 +90,51 @@ try {
   const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   const markdown = data.data.markdown;
   
-  const regex = /\[!\[[^\]]*\]\(([^)]+)\)\*\*(.*?)\*\*[\s\S]*?(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}[\s\S]*?\n\n?([\s\S]*?)\[…\][\s\S]*?Read more\]\(([^)]+)\)/g;
-  let match;
-  while ((match = regex.exec(markdown)) !== null) {
-    let [_, image, title, month, excerptRaw, link] = match;
-    const titleTrimmed = title.trim();
-    if (articlesMap.has(titleTrimmed)) {
-      const existing = articlesMap.get(titleTrimmed);
-      if (!existing.categories.includes('Top 10')) {
-        existing.categories.push('Top 10');
-      }
-    } else {
-      const dateString = Array.from(match[0].matchAll(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}/g))[0][0];
-      const slugMatch = link.match(/therecapreport\.com\/(.*?)\/?$/);
-      const slug = slugMatch ? slugMatch[1] : link;
-      let excerpt = excerptRaw.replace(/\\\\/g, '').replace(/\\/g, '').replace(/\n/g, ' ').trim() + "...";
-      excerpt = excerpt.replace(/^[^\w]+/, '');
-      
-      articlesMap.set(titleTrimmed, {
-        title: titleTrimmed,
-        image: image.trim(),
-        date: dateString.trim(),
-        excerpt: excerpt.trim(),
-        slug,
-        link,
-        category: 'Entertainment',
-        categories: ['Entertainment', 'Top 10']
-      });
-    }
+  const chunks = markdown.split('Read more](');
+  for (let i = 0; i < chunks.length - 1; i++) {
+       const block = chunks[i];
+       const linkMatch = chunks[i+1].split(')')[0];
+       const titleSplit = block.split(')**');
+       if (titleSplit.length < 2) continue;
+       const imgMatch = titleSplit[titleSplit.length - 2].split('[![](').pop();
+       const afterTitle = titleSplit[titleSplit.length - 1];
+       const dateSplit = afterTitle.split('**');
+       if (dateSplit.length < 2) continue;
+       const title = dateSplit[0].trim();
+       const rest = dateSplit[1];
+       const lines = rest.split('\\\\\n').map(s => s.trim()).filter(Boolean);
+       let date = "";
+       let excerptRaw = "";
+       for (const line of lines) {
+         if (line.match(/(January|February|March|April|May|June|July|August|September|October|November|December)/)) {
+           date = line;
+         } else if (line.length > 20 && !line.includes('[![](')) {
+           excerptRaw = line;
+           break;
+         }
+       }
+       let excerpt = excerptRaw.replace(/\\[\[\]…]+$/g, '').trim();
+       if (!excerpt.endsWith('...')) excerpt += '...';
+       const slugMatch = linkMatch.match(/therecapreport\.com\/(.*?)\/?$/);
+       const slug = slugMatch ? slugMatch[1] : linkMatch;
+       
+       if (articlesMap.has(title)) {
+         const existing = articlesMap.get(title);
+         if (!existing.categories.includes('Top 10')) {
+           existing.categories.push('Top 10');
+         }
+       } else {
+         articlesMap.set(title, {
+            title,
+            image: imgMatch,
+            date,
+            excerpt,
+            slug,
+            link: linkMatch,
+            category: 'Entertainment',
+            categories: ['Entertainment', 'Top 10']
+         });
+       }
   }
 } catch (err) {
   console.error("Error reading top 10.json", err);
@@ -169,5 +212,3 @@ console.log("Total unique articles processed:", finalArticles.length);
 const counts = {};
 finalArticles.forEach(a => counts[a.category] = (counts[a.category] || 0) + 1);
 console.log("Counts per category:", counts);
-console.log("\n--- ARTICLE LIST ---");
-finalArticles.forEach(a => console.log(`- [${a.category}] ${a.title}`));
