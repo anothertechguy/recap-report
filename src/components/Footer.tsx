@@ -73,13 +73,9 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-20 pt-8 border-t border-white/8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="mt-20 pt-8 border-t border-white/8 flex items-center justify-center">
           <p className="text-[11px] text-white/20 font-body uppercase tracking-[0.15em]">
             © 2026 The Recap Report. All rights reserved.
-          </p>
-          <p className="text-[11px] text-white/20 font-body uppercase tracking-[0.15em] inline-flex items-center gap-1.5">
-            <MapPin size={10} />
-            Atlanta, GA
           </p>
         </div>
       </div>

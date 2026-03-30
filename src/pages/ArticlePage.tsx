@@ -78,14 +78,14 @@ const ArticlePage = () => {
         className="container mx-auto px-6 mt-6"
       >
         <div
-          className="rounded-2xl overflow-hidden shadow-card bg-card transition-transform duration-700 hover:shadow-card-hover"
+          className="rounded-2xl overflow-hidden shadow-card bg-muted/10 transition-transform duration-700 hover:shadow-card-hover flex justify-center relative"
           style={{ perspective: "1000px" }}
         >
-          <div className="overflow-hidden aspect-[21/9] group">
+          <div className="w-full max-h-[75vh] flex justify-center items-center group overflow-hidden">
             <img
               src={article.image}
               alt={article.title}
-              className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-auto max-h-[75vh] object-contain transition-transform duration-700 group-hover:scale-[1.02]"
             />
           </div>
         </div>
