@@ -155,29 +155,10 @@ const ArticlePage = () => {
         </div>
 
         {/* Body */}
-        <div className="mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6">
-          <p className="text-xl md:text-2xl font-headline font-medium leading-relaxed text-foreground/90">
-            {article.excerpt}
-          </p>
-          <p className="drop-cap">
-            In an era where media landscapes shift daily and platforms rise and fall with algorithmic whims, there are those who choose to build differently. Not faster, not louder — but deeper. With intention. With community at the center of every decision.
-          </p>
-          <p>
-            This is a story about vision, resilience, and the kind of leadership that doesn't seek the spotlight but inevitably draws it. It's about creating infrastructure where none existed, and doing so with a clarity of purpose that resonates far beyond any single headline.
-          </p>
-          <p>
-            The journey hasn't been without its challenges. In fact, the obstacles have been the very things that shaped the mission — turning setbacks into stepping stones, and criticism into fuel for innovation.
-          </p>
-          <blockquote className="border-l-4 border-primary pl-6 py-4 my-10 italic text-xl md:text-2xl text-foreground/80 font-headline leading-snug">
-            "We're not just building a platform. We're building a legacy. And legacies aren't built on shortcuts."
-          </blockquote>
-          <p>
-            What makes this work particularly compelling is its refusal to conform to existing models. Instead of replicating what already exists, the approach has been to reimagine what's possible — and then build toward it, one intentional step at a time.
-          </p>
-          <p>
-            The impact is measurable but extends far beyond metrics. It's visible in the communities that have formed, the creators who have found their voice, and the conversations that continue to ripple outward, challenging assumptions and inspiring action.
-          </p>
-        </div>
+        <div 
+          className="mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6 prose prose-lg dark:prose-invert prose-p:mb-6 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:text-foreground/80 prose-blockquote:font-headline"
+          dangerouslySetInnerHTML={{ __html: article.content || `<p>${article.excerpt}</p>` }}
+        />
 
         {/* Categories */}
         <div className="mt-12 pt-8 border-t border-border">

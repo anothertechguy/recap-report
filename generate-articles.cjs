@@ -140,35 +140,79 @@ try {
   console.error("Error reading top 10.json", err);
 }
 
-const finalArticles = Array.from(articlesMap.values()).map((a, i) => {
-  return {
-    id: String(i + 1),
-    title: a.title,
-    excerpt: a.excerpt,
-    category: a.category,
-    categories: a.category === "Health And Beauty" ? ["Health And Beauty"] : [a.category], 
-    image: a.image,
-    slug: a.slug,
-    link: a.link,
-    date: a.date,
-    readTime: "5 min read",
-    author: {
-      name: "The Recap Report",
-      avatar: "https://therecapreport.com/wp-content/uploads/2021/11/favicon.png",
-      email: "info@therecapreport.com",
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+
+async function finalize() {
+  const finalArticles = Array.from(articlesMap.values()).map((a, i) => {
+    return {
+      id: String(i + 1),
+      title: a.title,
+      excerpt: a.excerpt,
+      category: a.category,
+      categories: a.category === "Health And Beauty" ? ["Health And Beauty"] : [a.category], 
+      image: a.image,
+      slug: a.slug,
+      link: a.link,
+      date: a.date,
+      readTime: "5 min read",
+      author: {
+        name: "The Recap Report",
+        avatar: "https://therecapreport.com/wp-content/uploads/2021/11/favicon.png",
+        email: "info@therecapreport.com",
+      }
+    };
+  });
+
+  finalArticles.forEach(a => {
+    const base = articlesMap.get(a.title);
+    a.categories = base.categories; 
+    if (a.category === "Health And Beauty") a.category = "Health And Beauty";
+    a.categories = a.categories.map(c => c === "Health And Beauty" ? "Health And Beauty" : c);
+  });
+  
+  console.log("Fetching full article contents...");
+
+  for (let i = 0; i < finalArticles.length; i++) {
+    const a = finalArticles[i];
+    try {
+      console.log(`[${i+1}/${finalArticles.length}] Fetching ${a.link}...`);
+      const res = await fetch(a.link);
+      const html = await res.text();
+      const dom = new JSDOM(html);
+      
+      const panels = Array.from(dom.window.document.querySelectorAll('.uk-panel.uk-margin-medium'));
+      // Find the panel with the most paragraphs
+      let bestPanel = null;
+      let maxP = 0;
+      for (const p of panels) {
+         const pCount = p.querySelectorAll('p').length;
+         if (pCount > maxP) {
+           maxP = pCount;
+           bestPanel = p;
+         }
+      }
+      
+      if (bestPanel) {
+        // Clean up any weird script tags or unwanted injected styles
+        Array.from(bestPanel.querySelectorAll('script, style, iframe')).forEach(el => el.remove());
+        // Remove empty paragraphs
+        Array.from(bestPanel.querySelectorAll('p')).forEach(el => {
+           if (!el.textContent.trim()) el.remove();
+        });
+        a.content = bestPanel.innerHTML.trim();
+      } else {
+        console.log("  -> Warning: No content blocks found.");
+        a.content = `<p>${a.excerpt}</p>`;
+      }
+    } catch (e) {
+      console.log(`  -> Error fetching: ${e.message}`);
+      a.content = `<p>${a.excerpt}</p>`;
     }
-  };
-});
+    delete a.link;
+  }
 
-finalArticles.forEach(a => {
-  const base = articlesMap.get(a.title);
-  a.categories = base.categories; 
-  if (a.category === "Health And Beauty") a.category = "Health And Beauty";
-  a.categories = a.categories.map(c => c === "Health And Beauty" ? "Health And Beauty" : c);
-  delete a.link;
-});
-
-const tsOutput = `export interface Article {
+  const tsOutput = `export interface Article {
   id: string;
   title: string;
   excerpt: string;
@@ -205,10 +249,11 @@ export const categories = [
 ];
 `;
 
-fs.writeFileSync('/Users/sean/Desktop/Antigravity Projects/recap-report/src/lib/articles.ts', tsOutput);
+  fs.writeFileSync('/Users/sean/Desktop/Antigravity Projects/recap-report/src/lib/articles.ts', tsOutput);
 
-console.log("Rebuilt articles.ts successfully.");
-console.log("Total unique articles processed:", finalArticles.length);
-const counts = {};
-finalArticles.forEach(a => counts[a.category] = (counts[a.category] || 0) + 1);
-console.log("Counts per category:", counts);
+  console.log("Rebuilt articles.ts successfully with FULL text body content.");
+  console.log("Total unique articles processed:", finalArticles.length);
+}
+
+// Call async wrapper
+finalize();
