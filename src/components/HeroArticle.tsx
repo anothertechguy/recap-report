@@ -55,12 +55,12 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
         >
           {/* Parallax Image */}
           <motion.div className="absolute inset-0 scale-110" style={{ y: imageY }}>
-            <img
-              src={article.image}
-              alt={article.title}
-              className="w-full h-full object-cover object-top"
-              loading="eager"
-            />
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full h-full object-cover object-[center_20%]"
+                loading="eager"
+              />
           </motion.div>
         </motion.div>
       </AnimatePresence>
