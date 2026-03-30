@@ -20,6 +20,18 @@ const stripLeadingDate = (html: string) =>
     '$1'
   );
 
+/** Convert short bold-only paragraphs into actual <h2> tags for subtitle styling, ignoring long quotes */
+const convertShortBoldsToHeadings = (html: string) => {
+  return html.replace(/<p>\s*(?:<b[^>]*>|<strong[^>]*>)(.*?)(?:<\/b>|<\/strong>)\s*<\/p>/gi, (match, innerText) => {
+    // strip inner HTML to count raw text length
+    const plainText = innerText.replace(/<[^>]+>/g, '').trim();
+    if (plainText.length > 0 && plainText.length < 120) {
+      return `<h2>${innerText}</h2>`;
+    }
+    return match;
+  });
+};
+
 const ArticlePage = () => {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
@@ -168,7 +180,7 @@ const ArticlePage = () => {
         {/* Body */}
         <div 
           className="article-body mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6 prose prose-lg dark:prose-invert prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-lg prose-blockquote:md:text-xl prose-blockquote:text-foreground/80"
-          dangerouslySetInnerHTML={{ __html: autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`)) }}
+          dangerouslySetInnerHTML={{ __html: convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`))) }}
         />
 
         {/* Categories */}
