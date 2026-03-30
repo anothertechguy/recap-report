@@ -1,7 +1,9 @@
-import { trendingHeadlines } from "@/lib/articles";
+import { articles } from "@/lib/articles";
 
 const BreakingTicker = () => {
-  const doubled = [...trendingHeadlines, ...trendingHeadlines];
+  // Get titles from the latest 8 articles to use as breaking news
+  const headlines = articles.slice(0, 8).map(a => a.title);
+  const doubled = [...headlines, ...headlines];
 
   return (
     <div className="relative h-10 bg-accent overflow-hidden z-50">

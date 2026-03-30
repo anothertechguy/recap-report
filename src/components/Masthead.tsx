@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Search, X, Menu } from "lucide-react";
-import { categories } from "@/lib/articles";
+import { categories, articles } from "@/lib/articles";
 import { motion, AnimatePresence } from "framer-motion";
 
 const Masthead = () => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const searchResults = searchQuery.trim()
+    ? articles
+        .filter(
+          (a) =>
+            a.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            a.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .slice(0, 5)
+    : [];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -17,7 +28,10 @@ const Masthead = () => {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSearchOpen(false);
+      if (e.key === "Escape") {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
     };
     if (searchOpen) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -129,14 +143,59 @@ const Masthead = () => {
                 <input
                   autoFocus
                   type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search reports..."
                   className="flex-1 bg-transparent text-2xl md:text-4xl font-headline font-medium text-foreground placeholder:text-muted-foreground outline-none"
                 />
-                <button onClick={() => setSearchOpen(false)} className="p-2 text-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => {
+                    setSearchOpen(false);
+                    setSearchQuery("");
+                  }}
+                  className="p-2 text-foreground hover:text-primary transition-colors"
+                >
                   <X size={24} />
                 </button>
               </div>
-              <p className="mt-4 text-sm text-muted-foreground font-body">Press ESC to close</p>
+              
+              {!searchQuery && (
+                <p className="mt-4 text-sm text-muted-foreground font-body">Press ESC to close</p>
+              )}
+
+              {/* Search Results */}
+              {searchQuery && searchResults.length > 0 && (
+                <div className="mt-6 space-y-2">
+                  {searchResults.map((article) => (
+                    <Link
+                      key={article.id}
+                      to={`/article/${article.slug}`}
+                      onClick={() => {
+                        setSearchOpen(false);
+                        setSearchQuery("");
+                      }}
+                      className="group block p-4 rounded-xl bg-card border border-border hover:border-primary/50 hover:shadow-card transition-all"
+                    >
+                      <div className="flex items-center justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-primary mb-1 block">
+                            {article.category}
+                          </span>
+                          <h4 className="font-headline text-[15px] font-semibold text-foreground group-hover:text-primary transition-colors truncate">
+                            {article.title}
+                          </h4>
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              {searchQuery && searchResults.length === 0 && (
+                <div className="mt-12 text-center">
+                  <p className="text-muted-foreground font-body">No articles found matching "{searchQuery}"</p>
+                </div>
+              )}
             </div>
           </motion.div>
         )}
