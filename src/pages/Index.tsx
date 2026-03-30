@@ -50,24 +50,29 @@ const Index = () => {
       <BreakingTicker />
       <Masthead />
       <StockTicker />
-      <HeroArticle articles={heroArticles} />
+      {/* Hero Section */}
+      {heroArticles.length > 0 && <HeroArticle articles={heroArticles} />}
 
       {/* Featured Carousel */}
-      <FeaturedCarousel articles={carouselArticles} />
+      {carouselArticles.length > 0 && <FeaturedCarousel articles={carouselArticles} />}
 
       {/* Latest Reports — Feature layout */}
       <section className="container mx-auto px-6 pb-8">
         <SectionDivider title="Latest Reports" accent subtitle="In-depth stories that matter" />
 
         {/* Feature card for first article */}
-        <div className="mb-8">
-          <ArticleCard article={latestArticles[0]} index={0} variant="feature" />
-        </div>
+        {latestArticles[0] && (
+          <div className="mb-8">
+            <ArticleCard article={latestArticles[0]} index={0} variant="feature" />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8">
           {/* Main column */}
           <div className="md:col-span-7 lg:col-span-8 space-y-8">
-            <ArticleCard article={latestArticles[1]} index={1} variant="feature" />
+            {latestArticles[1] && (
+              <ArticleCard article={latestArticles[1]} index={1} variant="feature" />
+            )}
           </div>
 
           {/* Sidebar — Trending */}

@@ -65,7 +65,7 @@ const StockTicker = () => {
           const stockJson = await stockRes.json();
           const results = stockJson.quoteResponse?.result || [];
           
-          results.forEach((q: any) => {
+          results.forEach((q: { symbol: string, regularMarketPrice: number, regularMarketChangePercent: number }) => {
             const symMap: Record<string, string> = { "^GSPC": "S&P 500", "^DJI": "DOW", "^IXIC": "NASDAQ" };
             const isUp = q.regularMarketChangePercent >= 0;
             liveData.push({
