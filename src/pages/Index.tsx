@@ -13,30 +13,44 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import Footer from "@/components/Footer";
 
 const Index = () => {
-  // Hero: article 0
-  const featuredArticle = articles[0];
+  // 1. Hero: top 3 most recent articles
+  const heroArticles = articles.slice(0, 3);
+  const usedIds = new Set(heroArticles.map(a => a.id));
 
-  // Carousel: articles 1-5
-  const carouselArticles = articles.slice(1, 6);
+  // 2. Editor's Picks (Carousel): exactly 1 from each category, ensuring no overlap with Hero
+  const carouselArticles = [];
+  // Get unique categories from the articles array to ensure dynamic matching
+  const availableCategories = Array.from(new Set(articles.map(a => a.category)));
+  
+  for (const cat of availableCategories) {
+    const articleForCat = articles.find(a => a.category === cat && !usedIds.has(a.id));
+    if (articleForCat) {
+      carouselArticles.push(articleForCat);
+      usedIds.add(articleForCat.id);
+    }
+  }
 
-  // Latest Reports section: articles 6-7
-  const latestArticles = articles.slice(6, 8);
+  // 3. Latest Reports section: next 2 unique articles
+  const latestArticles = articles.filter(a => !usedIds.has(a.id)).slice(0, 2);
+  latestArticles.forEach(a => usedIds.add(a.id));
 
-  // Trending sidebar: articles 8-11
-  const trendingArticles = articles.slice(8, 12);
+  // 4. Trending sidebar: next 4 unique articles
+  const trendingArticles = articles.filter(a => !usedIds.has(a.id)).slice(0, 4);
+  trendingArticles.forEach(a => usedIds.add(a.id));
 
-  // Culture Spotlight: article 12
-  const spotlightArticle = articles[12];
+  // 5. Culture Spotlight: next 1 unique article
+  const spotlightArticle = articles.filter(a => !usedIds.has(a.id))[0];
+  if (spotlightArticle) usedIds.add(spotlightArticle.id);
 
-  // More Stories: rest of articles (13+), curated across categories
-  const moreArticles = articles.slice(13);
+  // 6. More Stories: the remaining unique articles
+  const moreArticles = articles.filter(a => !usedIds.has(a.id));
 
   return (
     <div className="min-h-screen bg-background">
       <BreakingTicker />
       <Masthead />
       <StockTicker />
-      <HeroArticle article={featuredArticle} />
+      <HeroArticle articles={heroArticles} />
 
       {/* Featured Carousel */}
       <FeaturedCarousel articles={carouselArticles} />
