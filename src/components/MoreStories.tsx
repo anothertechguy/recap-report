@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import type { Article } from "@/lib/articles";
+import { type Article, getExcerpt } from "@/lib/articles";
 
 interface MoreStoriesProps {
   articles: Article[];
@@ -87,7 +87,7 @@ const MoreStories = ({ articles }: MoreStoriesProps) => {
                       {article.title}
                     </h3>
                     <div className="mt-2">
-                      <span className="text-[11px] text-muted-foreground font-body">{article.date}</span>
+                      <p className="text-[11px] text-muted-foreground font-body line-clamp-2 leading-relaxed">{getExcerpt(article, 100)}</p>
                     </div>
                   </div>
                 </Link>

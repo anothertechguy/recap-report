@@ -16,6 +16,19 @@ export interface Article {
   content?: string;
 }
 
+/** Strip HTML and return a clean text excerpt from article content */
+export const getExcerpt = (article: Article, maxLen = 120): string => {
+  if (!article.content) return "";
+  const text = article.content
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  // Strip leading date if present
+  const stripped = text.replace(/^(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}\s*/i, "");
+  if (stripped.length <= maxLen) return stripped;
+  return stripped.slice(0, maxLen).replace(/\s+\S*$/, "") + "…";
+};
+
 const defaultAuthor = {
   name: "The Recap Report",
   avatar: "https://therecapreport.com/wp-content/uploads/2021/11/favicon.png",

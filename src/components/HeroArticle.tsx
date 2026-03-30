@@ -120,8 +120,6 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
                     Read Full Story
                     <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
                   </Link>
-                  <span className="w-px h-4 bg-white/20 hidden md:inline-block" />
-                  <span className="text-white/50 text-xs font-body uppercase tracking-wider hidden md:inline-block">{article.date}</span>
                 </div>
               </motion.div>
             </AnimatePresence>

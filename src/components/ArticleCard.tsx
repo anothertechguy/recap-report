@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import type { Article } from "@/lib/articles";
+import { type Article, getExcerpt } from "@/lib/articles";
 
 interface ArticleCardProps {
   article: Article;
@@ -27,7 +27,7 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
             <h3 className="font-headline text-sm font-bold text-foreground mt-1 leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
               {article.title}
             </h3>
-            <span className="text-[11px] text-muted-foreground font-body mt-1.5 block">{article.date}</span>
+            <p className="text-[11px] text-muted-foreground font-body mt-1.5 line-clamp-2 leading-relaxed">{getExcerpt(article, 100)}</p>
           </div>
         </Link>
       </motion.div>
@@ -60,8 +60,10 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
                 <h3 className="font-headline text-xl md:text-2xl lg:text-3xl font-black text-foreground mt-3 leading-[1.1] group-hover:text-primary transition-colors duration-300">
                   {article.title}
                 </h3>
+                <p className="mt-4 text-sm text-muted-foreground font-body leading-relaxed line-clamp-3">
+                  {getExcerpt(article, 160)}
+                </p>
                 <div className="mt-6 flex items-center justify-between">
-                  <span className="text-xs text-muted-foreground font-body italic">{article.date}</span>
                   <span className="w-10 h-10 rounded-full border-2 border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 text-foreground">
                     <ArrowUpRight size={16} />
                   </span>
@@ -100,9 +102,7 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
             <h3 className="font-headline text-lg md:text-xl font-bold text-foreground mt-2 leading-snug group-hover:text-primary transition-colors duration-300 line-clamp-3">
               {article.title}
             </h3>
-            <div className="mt-3 pt-3 border-t border-border/50">
-              <span className="text-xs text-muted-foreground font-body italic">{article.date}</span>
-            </div>
+            <p className="mt-2 text-xs text-muted-foreground font-body leading-relaxed line-clamp-2">{getExcerpt(article, 100)}</p>
           </div>
         </div>
       </Link>
