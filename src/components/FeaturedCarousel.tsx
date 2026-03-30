@@ -129,7 +129,6 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                       <span className="px-3 py-1 rounded-full bg-primary text-white text-[10px] font-bold uppercase tracking-[0.15em] font-body">
                         {article.category}
                       </span>
-                      <span className="text-white/50 text-xs font-body">{article.readTime}</span>
                     </motion.div>
 
                     <motion.h3

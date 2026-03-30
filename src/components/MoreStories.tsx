@@ -86,10 +86,8 @@ const MoreStories = ({ articles }: MoreStoriesProps) => {
                     <h3 className="font-headline text-sm md:text-[15px] font-bold text-foreground mt-1 leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300">
                       {article.title}
                     </h3>
-                    <div className="flex items-center gap-3 mt-2">
+                    <div className="mt-2">
                       <span className="text-[11px] text-muted-foreground font-body">{article.date}</span>
-                      <span className="w-1 h-1 rounded-full bg-border" />
-                      <span className="text-[11px] text-muted-foreground font-body">{article.readTime}</span>
                     </div>
                   </div>
                 </Link>

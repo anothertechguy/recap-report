@@ -66,8 +66,6 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
                 <div className="mt-6 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-muted-foreground font-body">{article.date}</span>
-                    <span className="w-1 h-1 rounded-full bg-border" />
-                    <span className="text-xs text-muted-foreground font-body">{article.readTime}</span>
                   </div>
                   <span className="w-10 h-10 rounded-full border-2 border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 text-foreground">
                     <ArrowUpRight size={16} />
@@ -98,23 +96,17 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
               loading="lazy"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            {/* Hover arrow */}
             <div className="absolute top-4 right-4 w-9 h-9 rounded-full bg-primary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-400 translate-y-2 group-hover:translate-y-0 shadow-lg">
               <ArrowUpRight size={14} className="text-white" />
             </div>
           </div>
           <div className="p-5 md:p-6">
             <span className="category-tag">{article.category}</span>
-            <h3 className="font-headline text-lg md:text-xl font-bold text-foreground mt-2 leading-snug group-hover:text-primary transition-colors duration-300">
+            <h3 className="font-headline text-lg md:text-xl font-bold text-foreground mt-2 leading-snug group-hover:text-primary transition-colors duration-300 line-clamp-3">
               {article.title}
             </h3>
-            <p className="mt-3 text-sm text-muted-foreground font-body leading-relaxed line-clamp-2">
-              {article.excerpt}
-            </p>
-            <div className="mt-4 flex items-center gap-3">
+            <div className="mt-3 pt-3 border-t border-border/50">
               <span className="text-xs text-muted-foreground font-body">{article.date}</span>
-              <span className="w-1 h-1 rounded-full bg-border" />
-              <span className="text-xs text-muted-foreground font-body">{article.readTime}</span>
             </div>
           </div>
         </div>

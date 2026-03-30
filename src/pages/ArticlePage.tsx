@@ -106,8 +106,6 @@ const ArticlePage = () => {
         {/* Meta */}
         <div className="flex items-center gap-4 mt-6 text-sm text-muted-foreground font-body">
           <span className="flex items-center gap-1.5"><Calendar size={14} />{article.date}</span>
-          <span className="w-1 h-1 rounded-full bg-border" />
-          <span className="flex items-center gap-1.5"><Clock size={14} />{article.readTime}</span>
         </div>
 
         {/* Author + Share */}

@@ -123,7 +123,6 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
                   </Link>
                   <span className="w-px h-4 bg-white/20 hidden md:inline-block" />
                   <span className="text-white/50 text-xs font-body uppercase tracking-wider hidden md:inline-block">{article.date}</span>
-                  <span className="text-white/50 text-xs font-body uppercase tracking-wider hidden md:inline-block">{article.readTime}</span>
                 </div>
               </motion.div>
             </AnimatePresence>
