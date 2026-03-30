@@ -156,7 +156,7 @@ const ArticlePage = () => {
 
         {/* Body */}
         <div 
-          className="mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6 prose prose-lg dark:prose-invert prose-p:mb-6 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-xl prose-blockquote:text-foreground/80 prose-blockquote:font-headline"
+          className="mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6 prose prose-lg dark:prose-invert prose-headings:font-headline prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-headings:text-foreground prose-h2:text-2xl prose-h2:md:text-3xl prose-h2:lg:text-4xl prose-h2:mt-14 prose-h2:mb-6 prose-p:mb-6 prose-strong:text-foreground prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-lg prose-blockquote:md:text-xl prose-blockquote:text-foreground/80 prose-blockquote:font-headline prose-blockquote:uppercase prose-blockquote:tracking-wide prose-blockquote:leading-snug"
           dangerouslySetInnerHTML={{ __html: article.content || `<p>${article.excerpt}</p>` }}
         />
 
