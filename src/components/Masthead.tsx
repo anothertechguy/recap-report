@@ -85,7 +85,7 @@ const Masthead = () => {
           {categories.map((cat) => (
             <Link
               key={cat}
-              to={`/category/${cat.toLowerCase().replace(/ & /g, "-")}`}
+              to={`/category/${cat.toLowerCase().replace(/\s+/g, "-")}`}
               className="relative text-xs font-semibold uppercase tracking-[0.12em] font-body text-muted-foreground hover:text-primary transition-colors duration-300 py-1 group"
             >
               {cat}
@@ -114,7 +114,7 @@ const Masthead = () => {
                   transition={{ delay: i * 0.04, duration: 0.3 }}
                 >
                   <Link
-                    to={`/category/${cat.toLowerCase().replace(/ & /g, "-")}`}
+                    to={`/category/${cat.toLowerCase().replace(/\s+/g, "-")}`}
                     onClick={() => setMobileMenuOpen(false)}
                     className="block text-sm font-semibold uppercase tracking-[0.1em] font-body text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all py-2.5 px-3 rounded-lg"
                   >

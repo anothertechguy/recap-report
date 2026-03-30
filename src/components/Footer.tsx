@@ -36,7 +36,7 @@ const Footer = () => {
               {categories.map((cat) => (
                 <Link
                   key={cat}
-                  to={`/category/${cat.toLowerCase().replace(/ & /g, "-")}`}
+                  to={`/category/${cat.toLowerCase().replace(/\s+/g, "-")}`}
                   className="text-sm text-white/45 hover:text-primary transition-colors font-body inline-flex items-center gap-1 group"
                 >
                   {cat}
