@@ -296,3 +296,23 @@
 .article-body a:hover {
   opacity: 0.8;
 }
+
+/* WordPress-style subtitles: <p> containing only a <b> or <strong> */
+.article-body p:has(> b:only-child),
+.article-body p:has(> strong:only-child) {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  color: hsl(var(--foreground));
+}
+@media (min-width: 768px) {
+  .article-body p:has(> b:only-child),
+  .article-body p:has(> strong:only-child) {
+    font-size: 1.85rem;
+  }
+}
