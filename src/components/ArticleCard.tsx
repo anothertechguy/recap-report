@@ -60,13 +60,8 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
                 <h3 className="font-headline text-xl md:text-2xl lg:text-3xl font-black text-foreground mt-3 leading-[1.1] group-hover:text-primary transition-colors duration-300">
                   {article.title}
                 </h3>
-                <p className="mt-4 text-sm text-muted-foreground font-body leading-relaxed line-clamp-3">
-                  {article.excerpt}
-                </p>
                 <div className="mt-6 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-muted-foreground font-body">{article.date}</span>
-                  </div>
+                  <span className="text-xs text-muted-foreground font-body italic">{article.date}</span>
                   <span className="w-10 h-10 rounded-full border-2 border-border flex items-center justify-center group-hover:border-primary group-hover:bg-primary group-hover:text-white transition-all duration-300 text-foreground">
                     <ArrowUpRight size={16} />
                   </span>

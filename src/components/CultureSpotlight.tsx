@@ -68,7 +68,7 @@ const CultureSpotlight = ({ article }: CultureSpotlightProps) => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="font-headline text-2xl md:text-4xl lg:text-5xl font-black text-white leading-[1.1] italic relative z-10"
           >
-            "{article.excerpt}"
+            "{article.title}"
           </motion.blockquote>
 
           <motion.div

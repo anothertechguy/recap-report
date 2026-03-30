@@ -109,9 +109,8 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
                   {article.title}
                 </h2>
 
-                <p className="mt-5 text-white/70 text-base md:text-lg font-body max-w-2xl leading-relaxed hidden md:block">
-                  {article.excerpt}
-                </p>
+
+
 
                 <div className="mt-7 flex items-center gap-6">
                   <Link

@@ -140,14 +140,8 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                       {article.title}
                     </motion.h3>
 
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.6 }}
-                      className="mt-4 text-white/60 text-sm md:text-base font-body max-w-xl line-clamp-2 hidden md:block"
-                    >
-                      {article.excerpt}
-                    </motion.p>
+
+
                   </div>
                 </Link>
               </motion.div>
