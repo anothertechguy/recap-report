@@ -59,8 +59,9 @@ const processFile = (file, cat) => {
        let excerptRaw = "";
        
        for (const line of lines) {
-         if (line.match(/(January|February|March|April|May|June|July|August|September|October|November|December)/)) {
-           date = line;
+         const dateMatch = line.match(/((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})/);
+         if (dateMatch) {
+           date = dateMatch[1];
          } else if (line.length > 20 && !line.includes('[![](')) {
            excerptRaw = line;
            break;
