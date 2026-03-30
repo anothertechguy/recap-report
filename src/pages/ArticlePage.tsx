@@ -13,6 +13,13 @@ const autoLinkUrls = (html: string) =>
     tag ? tag : `<a href="${match}" target="_blank" rel="noopener noreferrer">${match}</a>`
   );
 
+/** Strip leading date (e.g. "May 2, 2025") from article body since it's shown separately */
+const stripLeadingDate = (html: string) =>
+  html.replace(
+    /^(\s*<p[^>]*>\s*)((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}\s*)/i,
+    '$1'
+  );
+
 const ArticlePage = () => {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
@@ -161,7 +168,7 @@ const ArticlePage = () => {
         {/* Body */}
         <div 
           className="article-body mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6 prose prose-lg dark:prose-invert prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-lg prose-blockquote:md:text-xl prose-blockquote:text-foreground/80"
-          dangerouslySetInnerHTML={{ __html: autoLinkUrls(article.content || `<p>${article.excerpt}</p>`) }}
+          dangerouslySetInnerHTML={{ __html: autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`)) }}
         />
 
         {/* Categories */}
