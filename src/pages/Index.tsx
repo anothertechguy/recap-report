@@ -96,7 +96,7 @@ const Index = () => {
       </section>
 
       {/* Culture Spotlight — Full bleed editorial moment */}
-      <CultureSpotlight article={spotlightArticle} />
+      {spotlightArticle && <CultureSpotlight article={spotlightArticle} />}
 
       {/* More Stories — Topic toggle + thumbnail columns */}
       <MoreStories articles={moreArticles} />
