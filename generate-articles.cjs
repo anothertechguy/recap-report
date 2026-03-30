@@ -17,6 +17,20 @@ const categoryMap = {
 
 const processFile = (file, cat) => {
   const filePath = path.join(exportDir, file);
+  
+  // Sanitize text: strip escaped backslashes, markdown bracket artifacts, etc.
+  const sanitize = (str) => {
+    return str
+      .replace(/\\\\/g, '')       // remove escaped backslashes
+      .replace(/\\n/g, ' ')        // replace literal \n with space
+      .replace(/\\\[…\\?\]/g, '') // remove \[…\]
+      .replace(/\[…\]/g, '')       // remove [...]
+      .replace(/\\\[/g, '')       // remove \[
+      .replace(/\\\]/g, '')       // remove \]
+      .replace(/\\{1,}/g, '')     // remove remaining stray backslashes
+      .replace(/\s+/g, ' ')        // collapse whitespace
+      .trim();
+  };
   try {
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const markdown = data.data.markdown;
@@ -53,8 +67,10 @@ const processFile = (file, cat) => {
          }
        }
        
-       let excerpt = excerptRaw.replace(/\\[\[\]…]+$/g, '').trim();
+       let excerpt = sanitize(excerptRaw.replace(/\\[\[\]…]+$/g, ''));
        if (!excerpt.endsWith('...')) excerpt += '...';
+       
+       date = sanitize(date);
        
        const slugMatch = linkMatch.match(/therecapreport\.com\/(.*?)\/?$/);
        const slug = slugMatch ? slugMatch[1] : linkMatch;
