@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { articles } from "@/lib/articles";
+import { articles, categories } from "@/lib/articles";
 import Masthead from "@/components/Masthead";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
@@ -12,16 +12,10 @@ import NotFound from "./NotFound";
 const CategoryPage = () => {
   const { categorySlug } = useParams<{ categorySlug: string }>();
   
-  // Reconstruct category string from slug (e.g. "health-and-beauty" -> "Health And Beauty")
-  const catMap: Record<string, string> = {
-    "entertainment": "Entertainment",
-    "lifestyle": "Lifestyle",
-    "business": "Business",
-    "health-and-beauty": "Health And Beauty",
-    "top-10": "Top 10"
-  };
-
-  const categoryName = categorySlug ? catMap[categorySlug.toLowerCase()] : undefined;
+  // Dynamically build slug→name map from the categories array
+  const categoryName = categorySlug
+    ? categories.find(c => c.toLowerCase().replace(/\s+/g, "-") === categorySlug.toLowerCase())
+    : undefined;
 
   if (!categoryName) return <NotFound />;
 
