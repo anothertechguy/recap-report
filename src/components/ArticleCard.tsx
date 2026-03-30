@@ -106,7 +106,7 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
               {article.title}
             </h3>
             <div className="mt-3 pt-3 border-t border-border/50">
-              <span className="text-xs text-muted-foreground font-body">{article.date}</span>
+              <span className="text-xs text-muted-foreground font-body italic">{article.date}</span>
             </div>
           </div>
         </div>
