@@ -7,11 +7,10 @@ import Masthead from "@/components/Masthead";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
 
-/** Wrap plain-text URLs in <a> tags (skip URLs already inside href="") */
+/** Wrap plain-text URLs in <a> tags — only in text nodes, never inside HTML attributes */
 const autoLinkUrls = (html: string) =>
-  html.replace(
-    /(?<!href=["'])(https?:\/\/[^\s<"']+)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+  html.replace(/(<[^>]+>)|((https?:\/\/)[^\s<]+)/gi, (match, tag) =>
+    tag ? tag : `<a href="${match}" target="_blank" rel="noopener noreferrer">${match}</a>`
   );
 
 const ArticlePage = () => {
