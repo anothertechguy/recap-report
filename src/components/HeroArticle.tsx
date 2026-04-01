@@ -88,7 +88,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
         style={{ y: textY }}
         className="absolute bottom-0 left-0 right-0 p-6 md:p-12 lg:p-20 z-10 pointer-events-none"
       >
-        <div className="container mx-auto flex items-end justify-between gap-8">
+        <div className="container mx-auto flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8">
           <div className="flex-1 pointer-events-auto max-w-5xl">
             <AnimatePresence mode="wait">
               <motion.div
@@ -127,7 +127,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
 
           {/* Minimalist Slide Indicators */}
           {articles.length > 1 && (
-            <div className="hidden md:flex items-center gap-2 pointer-events-auto pb-4">
+            <div className="flex items-center gap-2 pointer-events-auto pt-4 md:pt-0 pb-2 md:pb-4">
               {articles.map((_, i) => (
                 <button
                   key={i}
@@ -151,7 +151,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
       </motion.div>
 
       {/* Bottom gradient fade into next section */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-background to-transparent z-20 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 md:h-56 bg-gradient-to-t from-background via-background/50 to-transparent z-20 pointer-events-none" />
     </motion.section>
   );
 };
