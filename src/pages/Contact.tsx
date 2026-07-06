@@ -20,7 +20,7 @@ const Contact = () => {
           </p>
           <div className="p-8 border border-border/60 rounded-xl bg-card/30">
             <h3 className="text-foreground font-bold mb-2">Email</h3>
-            <p className="text-primary hover:underline cursor-pointer">info@therecapreport.com</p>
+            <a href="mailto:info@therecapreport.com" className="text-primary hover:underline">info@therecapreport.com</a>
           </div>
         </div>
       </main>

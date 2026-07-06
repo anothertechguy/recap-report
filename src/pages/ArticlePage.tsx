@@ -1,7 +1,8 @@
 import { useParams, Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, Mail, Calendar, Share2, Link2, ArrowUpRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import DOMPurify from "dompurify";
 import { articles } from "@/lib/articles";
 import Masthead from "@/components/Masthead";
 import Footer from "@/components/Footer";
@@ -61,10 +62,13 @@ const ArticlePage = () => {
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank");
   };
 
-  // Scroll to top on article change
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [slug]);
+  // Sanitize article HTML content
+  const sanitizedContent = article
+    ? DOMPurify.sanitize(
+        convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`))),
+        { ADD_ATTR: ['target'] }
+      )
+    : "";
 
   if (!article) {
     return (
@@ -110,6 +114,7 @@ const ArticlePage = () => {
             <img
               src={article.image}
               alt={article.title}
+              decoding="async"
               className="w-full h-auto max-h-[75vh] object-contain transition-transform duration-700 group-hover:scale-[1.02]"
             />
           </div>
@@ -180,7 +185,7 @@ const ArticlePage = () => {
         {/* Body */}
         <div 
           className="article-body mt-10 font-body text-foreground leading-[1.85] text-base md:text-lg max-w-[65ch] space-y-6 prose prose-lg dark:prose-invert prose-strong:text-foreground prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:italic prose-blockquote:text-lg prose-blockquote:md:text-xl prose-blockquote:text-foreground/80"
-          dangerouslySetInnerHTML={{ __html: convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`))) }}
+          dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
 
         {/* Categories */}

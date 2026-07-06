@@ -113,6 +113,8 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                     src={article.image}
                     alt={article.title}
                     className="w-full h-full object-cover object-[center_20%] ken-burns-img"
+                    loading="lazy"
+                    decoding="async"
                   />
                   {/* Sharp gradient overlays */}
                   <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent" />
@@ -197,7 +199,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
               }`}
             >
               <div className="aspect-[16/9]">
-                <img src={a.image} alt={a.title} className="w-full h-full object-cover object-top" />
+                <img src={a.image} alt={a.title} className="w-full h-full object-cover object-top" loading="lazy" decoding="async" />
               </div>
             </button>
           ))}
