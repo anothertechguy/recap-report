@@ -1,9 +1,13 @@
 # Adding articles to The Recap Report
 
 All articles live in one file: `src/lib/articles.ts`, in the `rawArticles` array.
-**Array order controls the homepage**: the first 3 entries are the hero slider,
-and everything else (featured carousel, latest, trending, spotlight) flows from
-there. To publish a new article, add it at the **top** of the array.
+**The site sorts articles by their `date` field, newest first**, and the
+homepage flows from that order: the 3 newest are the hero slider, then the
+featured carousel, latest reports, trending, and spotlight each take the next
+most-recent unused story — so nothing repeats and nothing new gets buried.
+Position in the file doesn't matter (same-date articles keep file order), but
+add new entries at the top anyway so the file reads newest-first. Getting the
+`date` right is what counts.
 
 ## The entry template
 
