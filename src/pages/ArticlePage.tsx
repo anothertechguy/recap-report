@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, Mail, Calendar, Share2, Link2, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import { articles } from "@/lib/articles";
 import Masthead from "@/components/Masthead";
@@ -37,6 +37,16 @@ const ArticlePage = () => {
   const { slug } = useParams();
   const article = articles.find((a) => a.slug === slug);
   const [copied, setCopied] = useState(false);
+
+  // Per-article browser-tab title; restore the site default on unmount
+  useEffect(() => {
+    if (article) {
+      document.title = `${article.title} — The Recap Report`;
+    }
+    return () => {
+      document.title = "The Recap Report — Culture, Business & Lifestyle News from Atlanta";
+    };
+  }, [article]);
 
   // Reading progress
   const { scrollYProgress } = useScroll();
