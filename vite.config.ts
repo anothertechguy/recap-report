@@ -4,7 +4,9 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/recap-report/",
+  // Cloudflare Pages (which sets CF_PAGES=1) serves the site at the domain
+  // root (therecapreport.com); GitHub Pages serves it under /recap-report/.
+  base: process.env.CF_PAGES ? "/" : "/recap-report/",
   server: {
     host: "::",
     port: 8080,

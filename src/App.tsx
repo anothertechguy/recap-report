@@ -20,7 +20,7 @@ function ScrollToTop() {
 const App = () => (
   <TooltipProvider>
     <Sonner />
-    <BrowserRouter basename="/recap-report">
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Index />} />
