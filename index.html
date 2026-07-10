@@ -25,6 +25,22 @@
     <meta name="twitter:site" content="@therecapreport" />
     <meta name="twitter:title" content="The Recap Report" />
     <meta name="twitter:description" content="Culture, Business & Lifestyle News from Atlanta" />
+
+    <script>
+      // SPA redirect decoder for GitHub Pages — restores the real path from 404.html's ?/ redirect
+      (function (l) {
+        if (l.search[1] === "/") {
+          var decoded = l.search
+            .slice(1)
+            .split("&")
+            .map(function (s) {
+              return s.replace(/~and~/g, "&");
+            })
+            .join("?");
+          window.history.replaceState(null, null, l.pathname.slice(0, -1) + decoded + l.hash);
+        }
+      })(window.location);
+    </script>
   </head>
 
   <body>

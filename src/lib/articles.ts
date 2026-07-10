@@ -106,7 +106,7 @@ export const articles: Article[] = [
   },
   {
     "id": "5",
-    "title": "Thomas Ricks, \\#14: From SWAC All-American, to SWAT, to CEO of Executive Protection",
+    "title": "Thomas Ricks, #14: From SWAC All-American, to SWAT, to CEO of Executive Protection",
     "excerpt": "...",
     "category": "Entertainment",
     "categories": [
