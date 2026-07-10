@@ -44,7 +44,7 @@ const rawArticles: Article[] = [
     "categories": [
       "Business"
     ],
-    "image": "https://therecapreport.com/wp-content/uploads/2026/06/IMG_8349.jpeg",
+    "image": "https://therecapreport.com/wp-content/uploads/2026/06/IMG_8346.webp",
     "slug": "patrice-lindo-wants-professionals-to-stop-waiting-to-be-chosen",
     "date": "June 22, 2026",
     "readTime": "4 min read",
@@ -60,7 +60,7 @@ const rawArticles: Article[] = [
       "Business",
       "Entertainment"
     ],
-    "image": "https://therecapreport.com/wp-content/uploads/2026/06/IMG_8341.jpeg",
+    "image": "https://therecapreport.com/wp-content/uploads/2026/06/IMG_8340.jpeg",
     "slug": "changing-the-scoreboard-travis-l-williams-is-creating-opportunities-beyond-basketball",
     "date": "June 22, 2026",
     "readTime": "5 min read",
@@ -76,7 +76,7 @@ const rawArticles: Article[] = [
       "Business",
       "Entertainment"
     ],
-    "image": "https://therecapreport.com/wp-content/uploads/2026/04/HK-Red-White-and-Blue-Traditional-Memorial-Day-Instagram-Post-Presentation.zip-5.png",
+    "image": "https://therecapreport.com/wp-content/uploads/2026/04/HK-Red-White-and-Blue-Traditional-Memorial-Day-Instagram-Post-Presentation.zip-1.png",
     "slug": "dr-heavenly-kimes-the-ai-forward-candidate-georgias-13th-district-needs",
     "date": "June 22, 2026",
     "readTime": "5 min read",
