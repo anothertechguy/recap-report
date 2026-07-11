@@ -42,8 +42,10 @@ const Index = () => {
   const spotlightArticle = articles.filter(a => !usedIds.has(a.id))[0];
   if (spotlightArticle) usedIds.add(spotlightArticle.id);
 
-  // 6. More Stories: the remaining unique articles
-  const moreArticles = articles.filter(a => !usedIds.has(a.id));
+  // 6. More Stories: the complete archive. Unlike the curated sections above
+  // (which never repeat a story), this browse/filter section gets EVERY
+  // article so its category tabs are complete — the newest stories must be
+  // findable here even though they also headline the hero.
 
   return (
     <div className="min-h-screen bg-background">
@@ -104,7 +106,7 @@ const Index = () => {
       {spotlightArticle && <CultureSpotlight article={spotlightArticle} />}
 
       {/* More Stories — Topic toggle + thumbnail columns */}
-      <MoreStories articles={moreArticles} />
+      <MoreStories articles={articles} />
 
       <NewsletterSignup />
       <Footer />
