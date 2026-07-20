@@ -295,3 +295,14 @@
 .article-body a:hover {
   opacity: 0.8;
 }
+/* In-body article photos: constrained and centered so a tall portrait doesn't
+   fill the screen and read as the end of the story. The hero/top image is
+   rendered outside .article-body and is intentionally not affected. */
+.article-body img.inline-figure {
+  display: block;
+  margin: 2.5rem auto;
+  max-height: 400px;
+  width: auto;
+  max-width: 100%;
+  border-radius: 0.75rem;
+}
