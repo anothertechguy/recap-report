@@ -1,0 +1,39 @@
+# The quality gate for therecapreport.com. Runs on every PR and every push to
+# main. Branch protection requires the "verify" job to pass before any PR can
+# merge — this is what makes it impossible for the admin portal (or anyone)
+# to publish a change that breaks the site.
+name: verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Article data integrity
+        run: node scripts/check-articles.cjs
+
+      - name: Build
+        run: npm run build
+
+      - name: Smoke test (site actually serves)
+        run: |
+          (npm run preview -- --port 4173 >/dev/null 2>&1 &)
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:4173/recap-report/ >/dev/null && break
+            sleep 1
+          done
+          curl -sf http://localhost:4173/recap-report/ | grep -qi "recap report"
+          echo "smoke test passed"

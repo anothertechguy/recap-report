@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>The Recap Report — Publishing Desk</title>
+<style>
+  :root { --red: #d92b2b; --ink: #16161a; --soft: #6b7280; --line: #e5e7eb; --bg: #fafaf8; --ok: #16803c; --warn: #b45309; }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); }
+  header { background: #fff; border-bottom: 3px solid var(--ink); padding: 18px 20px; }
+  header h1 { font-family: Georgia, "Times New Roman", serif; font-size: 22px; }
+  header h1 span { color: var(--red); }
+  header p { color: var(--soft); font-size: 13px; margin-top: 2px; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 20px; }
+  nav { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  nav button { flex: 1; min-width: 140px; padding: 14px 10px; font-size: 15px; font-weight: 600; border: 2px solid var(--ink); background: #fff; border-radius: 10px; cursor: pointer; }
+  nav button.active { background: var(--ink); color: #fff; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+  label { display: block; font-weight: 700; margin: 18px 0 6px; font-size: 15px; }
+  label:first-child { margin-top: 0; }
+  .hint { font-weight: 400; color: var(--soft); font-size: 13px; margin-top: 2px; }
+  input[type=text], textarea { width: 100%; padding: 12px; font-size: 15px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit; }
+  textarea { resize: vertical; }
+  textarea.body { min-height: 260px; }
+  .drop { border: 2px dashed #cbd5e1; border-radius: 10px; padding: 26px; text-align: center; color: var(--soft); cursor: pointer; background: #fcfcfb; }
+  .drop.hover { border-color: var(--red); color: var(--red); }
+  .thumbs { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; }
+  .thumb { display: flex; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 10px; padding: 8px; background: #fff; }
+  .thumb img { width: 72px; height: 54px; object-fit: cover; border-radius: 6px; }
+  .thumb .badge { background: var(--ink); color: #fff; border-radius: 999px; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+  .thumb .name { flex: 1; font-size: 13px; color: var(--soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .thumb button { border: 1px solid var(--line); background: #fff; border-radius: 6px; width: 30px; height: 30px; cursor: pointer; font-size: 14px; }
+  .primary { margin-top: 22px; width: 100%; padding: 16px; font-size: 17px; font-weight: 700; color: #fff; background: var(--red); border: none; border-radius: 10px; cursor: pointer; }
+  .primary:disabled { background: #d1a3a3; cursor: wait; }
+  .subtle { background: #fff; color: var(--ink); border: 1.5px solid var(--ink); }
+  .error { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; padding: 12px; border-radius: 8px; margin-top: 14px; font-size: 14px; display: none; }
+  .success { text-align: center; padding: 30px 16px; }
+  .success .big { font-size: 44px; }
+  .success h2 { font-family: Georgia, serif; margin: 10px 0 8px; }
+  .success p { color: var(--soft); font-size: 15px; line-height: 1.5; }
+  .item { display: flex; align-items: center; gap: 12px; padding: 14px 4px; border-bottom: 1px solid var(--line); }
+  .item:last-child { border-bottom: none; }
+  .item .t { flex: 1; }
+  .item .t .title { font-weight: 600; font-size: 15px; }
+  .item .t .meta { color: var(--soft); font-size: 13px; margin-top: 2px; }
+  .pill { font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
+  .pill.preparing { background: #eef2ff; color: #4338ca; }
+  .pill.checking { background: #fefce8; color: var(--warn); }
+  .pill.ready { background: #f0fdf4; color: var(--ok); }
+  .pill.needs_sean { background: #fef2f2; color: #991b1b; }
+  .act { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .act a, .act button { font-size: 14px; font-weight: 600; padding: 10px 14px; border-radius: 8px; text-decoration: none; cursor: pointer; }
+  .act a { border: 1.5px solid var(--ink); color: var(--ink); background: #fff; }
+  .act button.go { background: var(--ok); color: #fff; border: none; }
+  .note { background: #f8fafc; border-left: 3px solid #cbd5e1; padding: 10px 12px; font-size: 13px; color: #374151; margin-top: 10px; white-space: pre-wrap; border-radius: 0 8px 8px 0; max-height: 180px; overflow: auto; }
+  .undo { border: 1px dashed #fca5a5; }
+  .undo button { background: #fff; color: #991b1b; border: 1.5px solid #fca5a5; }
+  .empty { text-align: center; color: var(--soft); padding: 26px 10px; font-size: 15px; }
+  .listbtn { display: block; width: 100%; text-align: left; background: #fff; border: none; border-bottom: 1px solid var(--line); padding: 14px 6px; font-size: 15px; cursor: pointer; }
+  .listbtn:hover { background: #fafafa; }
+  .listbtn .d { color: var(--soft); font-size: 13px; margin-top: 2px; }
+  .back { background: none; border: none; color: var(--soft); font-size: 14px; cursor: pointer; padding: 0; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>THE RECAP <span>REPORT</span> — Publishing Desk</h1>
+  <p>Add an article or fix one that's already live. Claude handles the technical part and nothing goes live until checks pass.</p>
+</header>
+<div class="wrap">
+  <nav>
+    <button id="tab-new" class="active">➕ New Article</button>
+    <button id="tab-fix">✏️ Fix an Article</button>
+    <button id="tab-activity">📋 Activity</button>
+  </nav>
+
+  <section id="view-new" class="card">
+    <label>Headline</label>
+    <input type="text" id="n-title" placeholder="The headline, exactly as it should appear" />
+    <label>Photos <div class="hint">First photo becomes the big cover photo. Drag to reorder with the arrows.</div></label>
+    <div class="drop" id="drop">📷 Tap here to choose photos (or drag them in)</div>
+    <input type="file" id="file" accept="image/*" multiple hidden />
+    <div class="thumbs" id="thumbs"></div>
+    <label>Article text <div class="hint">Paste the whole article. Plain text is perfect — formatting is handled for you.</div></label>
+    <textarea id="n-text" class="body" placeholder="Paste the article here…"></textarea>
+    <label>Notes for Claude (optional) <div class="hint">Anything you'd tell a person: “the man in photo 2 is the mayor”, “this one's a business story”, etc.</div></label>
+    <textarea id="n-notes" rows="3" placeholder="Optional…"></textarea>
+    <div class="error" id="n-error"></div>
+    <button class="primary" id="n-submit">Send it in →</button>
+  </section>
+
+  <section id="view-fix" class="card" hidden>
+    <div id="fix-list"><div class="empty">Loading articles…</div></div>
+    <div id="fix-edit" hidden>
+      <button class="back" id="fix-back">← Back to article list</button>
+      <h3 id="f-title" style="font-family:Georgia,serif; margin-bottom:4px;"></h3>
+      <p class="hint" id="f-date"></p>
+      <label>Article text <div class="hint">Fix anything in the text. Photos stay exactly where they are.</div></label>
+      <textarea id="f-text" class="body"></textarea>
+      <label>What changed and why? (optional)</label>
+      <textarea id="f-notes" rows="2" placeholder="e.g. fixed the spelling of a name"></textarea>
+      <div class="error" id="f-error"></div>
+      <button class="primary" id="f-submit">Send the fix →</button>
+    </div>
+  </section>
+
+  <section id="view-activity" hidden>
+    <div class="card" id="activity-list"><div class="empty">Loading…</div></div>
+    <div class="card undo" id="undo-card" hidden>
+      <strong>Emergency undo</strong>
+      <p class="hint" id="undo-what" style="margin:6px 0 10px;"></p>
+      <button id="undo-btn">Undo the last publish</button>
+    </div>
+  </section>
+
+  <section id="view-done" class="card success" hidden>
+    <div class="big">✅</div>
+    <h2 id="done-title">Got it!</h2>
+    <p id="done-text"></p>
+    <button class="primary subtle" id="done-activity" style="max-width:320px;margin:18px auto 0;display:block;">See its progress →</button>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const api = async (path, opts) => {
+  const r = await fetch("/api/" + path, opts ? { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(opts) } : undefined);
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || "Something went wrong — try again.");
+  return d;
+};
+
+// ---- tabs ----
+const views = { new: "view-new", fix: "view-fix", activity: "view-activity" };
+let pollTimer = null;
+function show(tab) {
+  for (const v of [...Object.values(views), "view-done"]) $(v).hidden = true;
+  for (const t of Object.keys(views)) $("tab-" + t).classList.toggle("active", t === tab);
+  $(views[tab]).hidden = false;
+  clearInterval(pollTimer);
+  if (tab === "activity") { loadActivity(); pollTimer = setInterval(loadActivity, 30000); }
+  if (tab === "fix") loadArticles();
+}
+for (const t of Object.keys(views)) $("tab-" + t).onclick = () => show(t);
+
+function done(title, text) {
+  for (const v of Object.values(views)) $(v).hidden = true;
+  $("done-title").textContent = title;
+  $("done-text").textContent = text;
+  $("view-done").hidden = false;
+}
+$("done-activity").onclick = () => show("activity");
+
+// ---- new article ----
+let photos = [];
+$("drop").onclick = () => $("file").click();
+$("drop").ondragover = (e) => { e.preventDefault(); $("drop").classList.add("hover"); };
+$("drop").ondragleave = () => $("drop").classList.remove("hover");
+$("drop").ondrop = (e) => { e.preventDefault(); $("drop").classList.remove("hover"); addFiles(e.dataTransfer.files); };
+$("file").onchange = () => { addFiles($("file").files); $("file").value = ""; };
+
+function addFiles(list) {
+  for (const f of list) {
+    if (!f.type.startsWith("image/")) continue;
+    if (f.size > 8 * 1024 * 1024) { showErr("n-error", `“${f.name}” is over 8 MB — please use a smaller copy.`); continue; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      photos.push({ name: f.name, dataUrl: reader.result });
+      renderThumbs();
+    };
+    reader.readAsDataURL(f);
+  }
+}
+function renderThumbs() {
+  $("thumbs").innerHTML = "";
+  photos.forEach((p, i) => {
+    const row = document.createElement("div");
+    row.className = "thumb";
+    row.innerHTML = `<div class="badge">${i + 1}</div><img src="${p.dataUrl}" alt="" /><div class="name">${p.name}${i === 0 ? " · cover photo" : ""}</div>`;
+    const mk = (txt, fn, dis) => { const b = document.createElement("button"); b.textContent = txt; b.disabled = !!dis; b.onclick = fn; row.appendChild(b); };
+    mk("↑", () => { [photos[i - 1], photos[i]] = [photos[i], photos[i - 1]]; renderThumbs(); }, i === 0);
+    mk("↓", () => { [photos[i + 1], photos[i]] = [photos[i], photos[i + 1]]; renderThumbs(); }, i === photos.length - 1);
+    mk("✕", () => { photos.splice(i, 1); renderThumbs(); });
+    $("thumbs").appendChild(row);
+  });
+}
+function showErr(id, msg) { const el = $(id); el.textContent = msg; el.style.display = "block"; setTimeout(() => (el.style.display = "none"), 8000); }
+
+$("n-submit").onclick = async () => {
+  const title = $("n-title").value.trim(), text = $("n-text").value.trim();
+  if (!title) return showErr("n-error", "Please add a headline.");
+  if (!photos.length) return showErr("n-error", "Please add at least one photo.");
+  if (!text) return showErr("n-error", "Please paste the article text.");
+  $("n-submit").disabled = true; $("n-submit").textContent = "Sending… (photos take a moment)";
+  try {
+    await api("submit", {
+      title, text, notes: $("n-notes").value,
+      images: photos.map((p) => ({ name: p.name, data: p.dataUrl.split(",")[1] })),
+    });
+    $("n-title").value = $("n-text").value = $("n-notes").value = ""; photos = []; renderThumbs();
+    done("Got it! Your article is being prepared.", "Claude is formatting it now — that takes a few minutes. Check the Activity tab: when it says “Ready”, you can preview it and press Publish.");
+  } catch (e) { showErr("n-error", e.message); }
+  $("n-submit").disabled = false; $("n-submit").textContent = "Send it in →";
+};
+
+// ---- fix an article ----
+let currentArticle = null;
+async function loadArticles() {
+  $("fix-edit").hidden = true; $("fix-list").hidden = false;
+  try {
+    const d = await api("articles");
+    $("fix-list").innerHTML = "";
+    d.articles.forEach((a) => {
+      const b = document.createElement("button");
+      b.className = "listbtn";
+      b.innerHTML = `<div>${a.title}</div><div class="d">${a.date} · ${a.category}</div>`;
+      b.onclick = () => openArticle(a);
+      $("fix-list").appendChild(b);
+    });
+  } catch (e) { $("fix-list").innerHTML = `<div class="empty">${e.message}</div>`; }
+}
+async function openArticle(a) {
+  currentArticle = a;
+  $("f-title").textContent = a.title; $("f-date").textContent = a.date;
+  $("f-text").value = "Loading…";
+  $("fix-list").hidden = true; $("fix-edit").hidden = false;
+  try { $("f-text").value = (await api("articles?id=" + a.id)).text; }
+  catch (e) { $("f-text").value = ""; showErr("f-error", e.message); }
+}
+$("fix-back").onclick = loadArticles;
+$("f-submit").onclick = async () => {
+  if (!$("f-text").value.trim()) return showErr("f-error", "The article text is empty.");
+  $("f-submit").disabled = true; $("f-submit").textContent = "Sending…";
+  try {
+    await api("edit", { articleId: currentArticle.id, articleTitle: currentArticle.title, text: $("f-text").value, notes: $("f-notes").value });
+    $("f-notes").value = "";
+    done("Fix received!", "Claude is applying your fix and re-checking the site. Watch the Activity tab — when it's “Ready”, preview it and press Publish.");
+  } catch (e) { showErr("f-error", e.message); }
+  $("f-submit").disabled = false; $("f-submit").textContent = "Send the fix →";
+};
+
+// ---- activity ----
+const STATE = {
+  preparing: ["preparing", "Preparing…"],
+  checking: ["checking", "Safety checks running…"],
+  ready: ["ready", "Ready to publish"],
+  needs_sean: ["needs_sean", "Needs Sean"],
+};
+async function loadActivity() {
+  try {
+    const d = await api("status");
+    const list = $("activity-list");
+    list.innerHTML = "";
+    if (!d.open.length) list.innerHTML = `<div class="empty">Nothing in progress. Anything you send in will show up here.</div>`;
+    d.open.forEach((s) => {
+      const [cls, label] = STATE[s.state] || STATE.preparing;
+      const el = document.createElement("div");
+      el.className = "item"; el.style.display = "block";
+      el.innerHTML = `<div style="display:flex;align-items:center;gap:12px;">
+          <div class="t"><div class="title">${s.title}</div><div class="meta">sent ${new Date(s.createdAt).toLocaleString()}</div></div>
+          <span class="pill ${cls}">${label}</span></div>`;
+      if (s.note) { const n = document.createElement("div"); n.className = "note"; n.textContent = s.note; el.appendChild(n); }
+      if (s.state === "ready") {
+        const act = document.createElement("div"); act.className = "act";
+        if (s.previewUrl) { const a = document.createElement("a"); a.href = s.previewUrl; a.target = "_blank"; a.textContent = "👀 Preview the site"; act.appendChild(a); }
+        const b = document.createElement("button"); b.className = "go"; b.textContent = "✅ Publish to the live site";
+        b.onclick = async () => {
+          if (!confirm(`Publish “${s.title}” to therecapreport.com?`)) return;
+          b.disabled = true; b.textContent = "Publishing…";
+          try { await api("publish", { pr: s.pr }); alert("Published! It'll be live in about a minute."); loadActivity(); }
+          catch (e) { alert(e.message); b.disabled = false; b.textContent = "✅ Publish to the live site"; }
+        };
+        act.appendChild(b); el.appendChild(act);
+      }
+      list.appendChild(el);
+    });
+    if (d.lastPublished) {
+      $("undo-card").hidden = false;
+      $("undo-what").textContent = `Last published: “${d.lastPublished.title}” (${new Date(d.lastPublished.mergedAt).toLocaleString()}). Only use this if something is wrong on the live site.`;
+      $("undo-btn").onclick = async () => {
+        if (!confirm(`Remove “${d.lastPublished.title}” from the live site?`)) return;
+        if (!confirm("Are you sure? This takes the last publish off therecapreport.com.")) return;
+        try { const r = await api("revert", {}); alert(`Done — “${r.reverted}” is being taken down now.`); loadActivity(); }
+        catch (e) { alert(e.message); }
+      };
+    } else $("undo-card").hidden = true;
+  } catch (e) { $("activity-list").innerHTML = `<div class="empty">${e.message}</div>`; }
+}
+</script>
+</body>
+</html>

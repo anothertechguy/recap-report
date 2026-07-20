@@ -26,6 +26,15 @@ export default defineConfig({
         fs.rmSync(path.resolve(__dirname, "dist/404.html"), { force: true });
       },
     },
+    // The admin portal (public/admin/) only works on Cloudflare, where its
+    // Pages Functions and the Cloudflare Access login wall exist. Strip it
+    // from GitHub Pages builds so staging never serves an unprotected copy.
+    !process.env.CF_PAGES && {
+      name: "drop-admin-on-gh-pages",
+      closeBundle() {
+        fs.rmSync(path.resolve(__dirname, "dist/admin"), { recursive: true, force: true });
+      },
+    },
   ].filter(Boolean),
   resolve: {
     alias: {

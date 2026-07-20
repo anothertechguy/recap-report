@@ -1,0 +1,52 @@
+# When the admin portal opens a PR (labeled client-submission or client-edit),
+# Claude runs here to turn the raw submission into a proper article entry —
+# image conversion, category, photo placement, formatting — then pushes the
+# result to the PR branch. The verify workflow then gates the merge.
+#
+# Claude only ever works on the PR branch. It cannot merge; merging happens
+# from the portal's Publish button and requires the verify check to be green.
+name: process-submission
+
+on:
+  pull_request:
+    types: [opened, labeled]
+
+concurrency:
+  group: process-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  process:
+    if: |
+      (contains(github.event.pull_request.labels.*.name, 'client-submission') ||
+       contains(github.event.pull_request.labels.*.name, 'client-edit')) &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Process submission with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt: |
+            You are processing a client submission for The Recap Report.
+            Follow the instructions in .github/claude/process-submission.md
+            exactly. This is PR #${{ github.event.pull_request.number }},
+            branch "${{ github.event.pull_request.head.ref }}".
+          claude_args: "--allowedTools 'Bash,Read,Write,Edit,Glob,Grep' --max-turns 60"
