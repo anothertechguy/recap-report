@@ -30,7 +30,7 @@ const Index = () => {
     }
   }
 
-  // 3. Editor's Picks section: next 2 unique articles
+  // 3. Editors Pick section: next 2 unique articles
   const latestArticles = articles.filter(a => !usedIds.has(a.id)).slice(0, 2);
   latestArticles.forEach(a => usedIds.add(a.id));
 
@@ -58,9 +58,9 @@ const Index = () => {
       {/* Featured Carousel */}
       {carouselArticles.length > 0 && <FeaturedCarousel articles={carouselArticles} />}
 
-      {/* Editor's Picks — Feature layout */}
+      {/* Editors Pick — Feature layout */}
       <section className="container mx-auto px-6 pb-8">
-        <SectionDivider title="Editor's Picks" accent subtitle="In-depth stories that matter" />
+        <SectionDivider title="Editors Pick" accent subtitle="In-depth stories that matter" />
 
         {/* Feature card for first article */}
         {latestArticles[0] && (
