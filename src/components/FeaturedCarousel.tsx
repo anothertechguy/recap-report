@@ -61,8 +61,8 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
   const article = articles[current];
 
   return (
-    <section className="py-12 md:py-20">
-      <div className="container mx-auto px-6">
+    <div>
+      <div>
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -91,12 +91,11 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
       </div>
 
       <div
-        className="container mx-auto px-6"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         <div className="relative rounded-2xl overflow-hidden shadow-card bg-card" style={{ perspective: "1200px" }}>
-          <div className="relative overflow-hidden aspect-[16/9] md:aspect-[2.4/1]">
+          <div className="relative overflow-hidden aspect-[16/9]">
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={current}
@@ -205,7 +204,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
