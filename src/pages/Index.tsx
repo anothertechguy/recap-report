@@ -17,18 +17,11 @@ const Index = () => {
   const heroArticles = articles.slice(0, 3);
   const usedIds = new Set(heroArticles.map(a => a.id));
 
-  // 2. Latest Reports (Carousel): exactly 1 from each category, ensuring no overlap with Hero
-  const carouselArticles = [];
-  // Get unique categories from the articles array to ensure dynamic matching
-  const availableCategories = Array.from(new Set(articles.map(a => a.category)));
-  
-  for (const cat of availableCategories) {
-    const articleForCat = articles.find(a => a.category === cat && !usedIds.has(a.id));
-    if (articleForCat) {
-      carouselArticles.push(articleForCat);
-      usedIds.add(articleForCat.id);
-    }
-  }
+  // 2. Latest Reports (Carousel): the next 5 newest after the hero.
+  // Purely recency-based so the section matches its name — every new article
+  // enters the hero and pushes the rest down one slot through the whole page.
+  const carouselArticles = articles.filter(a => !usedIds.has(a.id)).slice(0, 5);
+  carouselArticles.forEach(a => usedIds.add(a.id));
 
   // 3. Editors Pick section: next 1 unique article
   const latestArticles = articles.filter(a => !usedIds.has(a.id)).slice(0, 1);
