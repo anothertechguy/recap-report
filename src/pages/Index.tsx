@@ -17,7 +17,7 @@ const Index = () => {
   const heroArticles = articles.slice(0, 3);
   const usedIds = new Set(heroArticles.map(a => a.id));
 
-  // 2. Editor's Picks (Carousel): exactly 1 from each category, ensuring no overlap with Hero
+  // 2. Latest Reports (Carousel): exactly 1 from each category, ensuring no overlap with Hero
   const carouselArticles = [];
   // Get unique categories from the articles array to ensure dynamic matching
   const availableCategories = Array.from(new Set(articles.map(a => a.category)));
@@ -30,7 +30,7 @@ const Index = () => {
     }
   }
 
-  // 3. Latest Reports section: next 2 unique articles
+  // 3. Editor's Picks section: next 2 unique articles
   const latestArticles = articles.filter(a => !usedIds.has(a.id)).slice(0, 2);
   latestArticles.forEach(a => usedIds.add(a.id));
 
@@ -58,9 +58,9 @@ const Index = () => {
       {/* Featured Carousel */}
       {carouselArticles.length > 0 && <FeaturedCarousel articles={carouselArticles} />}
 
-      {/* Latest Reports — Feature layout */}
+      {/* Editor's Picks — Feature layout */}
       <section className="container mx-auto px-6 pb-8">
-        <SectionDivider title="Latest Reports" accent subtitle="In-depth stories that matter" />
+        <SectionDivider title="Editor's Picks" accent subtitle="In-depth stories that matter" />
 
         {/* Feature card for first article */}
         {latestArticles[0] && (

@@ -71,7 +71,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
           className="flex items-center gap-4 mb-10"
         >
           <div className="w-3 h-3 rounded-full bg-primary" />
-          <h2 className="font-headline text-2xl md:text-3xl font-bold text-foreground">Editor's Picks</h2>
+          <h2 className="font-headline text-2xl md:text-3xl font-bold text-foreground">Latest Reports</h2>
           <div className="flex-1 h-px bg-gradient-to-r from-primary/40 via-border to-transparent" />
           <div className="hidden md:flex items-center gap-2">
             <button
