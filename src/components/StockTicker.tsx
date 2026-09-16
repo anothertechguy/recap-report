@@ -34,9 +34,15 @@ const StockTicker = () => {
       locale: "en"
     });
     
-    if (container.current) {
-      container.current.appendChild(script);
-    }
+    // Third-party ticker (script + CSS + websocket) — inject only after the page has loaded and
+    // the main thread is idle, so it never competes with first paint or hydration.
+    let idle = 0;
+    const inject = () => { if (container.current) container.current.appendChild(script); };
+    const schedule = () => {
+      idle = typeof requestIdleCallback === "function" ? requestIdleCallback(inject, { timeout: 3000 }) : window.setTimeout(inject, 1500);
+    };
+    if (document.readyState === "complete") schedule(); else window.addEventListener("load", schedule, { once: true });
+    return () => { window.removeEventListener("load", schedule); if (typeof cancelIdleCallback === "function") cancelIdleCallback(idle); else clearTimeout(idle); };
   }, []);
 
   return (

@@ -65,7 +65,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
     <div>
       <div>
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={false}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
@@ -127,7 +127,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                   {/* Content */}
                   <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-12 lg:p-16">
                     <motion.div
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={current === 0 ? false : { opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.3 }}
                       className="flex items-center gap-3 mb-4"
@@ -138,7 +138,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                     </motion.div>
 
                     <motion.h3
-                      initial={{ opacity: 0, y: 30 }}
+                      initial={current === 0 ? false : { opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.4, duration: 0.6 }}
                       className="font-headline text-xl md:text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.08] max-w-3xl"

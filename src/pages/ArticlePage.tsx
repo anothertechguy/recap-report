@@ -115,7 +115,7 @@ const ArticlePage = () => {
 
       {/* Hero Image */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
         className="container mx-auto px-6 mt-6"
@@ -140,7 +140,7 @@ const ArticlePage = () => {
 
       {/* Article Content */}
       <motion.article
-        initial={{ opacity: 0, y: 20 }}
+        initial={false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
         className="container mx-auto px-6 py-12 max-w-3xl"

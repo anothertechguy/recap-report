@@ -26,8 +26,11 @@ try {
       .replace(/<meta name="twitter:description" content="[^"]*" \/>/, `<meta name="twitter:description" content="${esc(r.description)}" />`)
       .replace("</head>", `<link rel="canonical" href="${site}${r.path === "/" ? "/" : r.path}" /><meta name="twitter:image" content="${esc(r.image)}" /></head>`)
       .replace('<div id="root"></div>', `<div id="root">${html}</div>`);
-    const dir = r.path === "/" ? DIST : path.join(DIST, r.path); fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, "index.html"), out); n++;
+    // Non-root routes are written as <path>.html (not <path>/index.html): Cloudflare Pages serves
+    // /about.html at /about, which is how the app links, so no 308 to a trailing-slash URL.
+    const file = r.path === "/" ? path.join(DIST, "index.html") : path.join(DIST, r.path.replace(/\/$/, "") + ".html");
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, out); n++;
   }
   fs.writeFileSync(path.join(DIST, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${list.map((r) => `  <url><loc>${site}${r.path === "/" ? "/" : r.path}</loc>${r.lastmod ? `<lastmod>${r.lastmod}</lastmod>` : ""}</url>`).join("\n")}\n</urlset>\n`);
   // Pages serves index.html for unknown paths on its own (no 404.html on CF builds); the blanket
