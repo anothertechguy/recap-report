@@ -45,6 +45,7 @@ const Index = () => {
       <BreakingTicker />
       <Masthead />
       <StockTicker />
+      <main>
       {/* Hero Section */}
       {heroArticles.length > 0 && <HeroArticle articles={heroArticles} />}
 
@@ -95,6 +96,7 @@ const Index = () => {
       {/* More Stories — Topic toggle + thumbnail columns */}
       <MoreStories articles={articles} />
 
+      </main>
       <NewsletterSignup />
       <Footer />
     </div>

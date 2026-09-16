@@ -101,7 +101,7 @@ const NewsletterSignup = () => {
                 </form>
               </div>
             </div>
-            <p className="mt-4 text-white/20 text-xs font-body">
+            <p className="mt-4 text-white/60 text-xs font-body">
               No spam. Unsubscribe anytime. Read by 10,000+ culture movers.
             </p>
           </motion.div>

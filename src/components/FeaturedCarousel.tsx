@@ -1,3 +1,4 @@
+import { srcSetFor } from "@/lib/articles";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -75,12 +76,14 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
           <div className="flex-1 h-px bg-gradient-to-r from-primary/40 via-border to-transparent" />
           <div className="hidden md:flex items-center gap-2">
             <button
+              aria-label="Previous story"
               onClick={() => navigate(-1)}
               className="w-10 h-10 rounded-full border-2 border-border text-foreground flex items-center justify-center hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300"
             >
               <ChevronLeft size={18} />
             </button>
             <button
+              aria-label="Next story"
               onClick={() => navigate(1)}
               className="w-10 h-10 rounded-full border-2 border-border text-foreground flex items-center justify-center hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300"
             >
@@ -110,6 +113,8 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                 <Link to={`/article/${article.slug}`} className="group block w-full h-full relative">
                   <img
                     src={article.image}
+                    srcSet={srcSetFor(article.image)}
+                    sizes="(max-width: 768px) 100vw, 800px"
                     alt={article.title}
                     className="w-full h-full object-cover object-[center_20%] ken-burns-img"
                     loading="lazy"
@@ -127,7 +132,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
                       transition={{ delay: 0.3 }}
                       className="flex items-center gap-3 mb-4"
                     >
-                      <span className="px-3 py-1 rounded-full bg-primary text-white text-[10px] font-bold uppercase tracking-[0.15em] font-body">
+                      <span className="px-3 py-1 rounded-full bg-[hsl(0_78%_38%)] text-white text-[10px] font-bold uppercase tracking-[0.15em] font-body">
                         {article.category}
                       </span>
                     </motion.div>
@@ -170,12 +175,14 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
           {/* Mobile nav */}
           <div className="absolute bottom-4 right-4 flex items-center gap-2 z-20 md:hidden">
             <button
+              aria-label="Previous story"
               onClick={() => navigate(-1)}
               className="w-9 h-9 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center"
             >
               <ChevronLeft size={16} />
             </button>
             <button
+              aria-label="Next story"
               onClick={() => navigate(1)}
               className="w-9 h-9 rounded-full bg-black/30 backdrop-blur-md text-white flex items-center justify-center"
             >
@@ -189,6 +196,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
           {articles.map((a, i) => (
             <button
               key={a.id}
+              aria-label={a.title}
               onClick={() => {
                 setDirection(i > current ? 1 : -1);
                 setCurrent(i);
@@ -198,7 +206,7 @@ const FeaturedCarousel = ({ articles }: FeaturedCarouselProps) => {
               }`}
             >
               <div className="aspect-[16/9]">
-                <img src={a.image} alt={a.title} className="w-full h-full object-cover object-top" loading="lazy" decoding="async" />
+                <img src={a.image} srcSet={srcSetFor(a.image)} sizes="120px" alt={a.title} className="w-full h-full object-cover object-top" loading="lazy" decoding="async" />
               </div>
             </button>
           ))}

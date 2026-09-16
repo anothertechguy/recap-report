@@ -3,12 +3,15 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowLeft, Mail, Calendar, Share2, Link2, ArrowUpRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import { articles } from "@/lib/articles";
+import { articles, srcSetFor } from "@/lib/articles";
 import Masthead from "@/components/Masthead";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
 
 /** Wrap plain-text URLs in <a> tags — only in text nodes, never inside HTML attributes */
+// WordPress bodies often start at <h3>; with the page's <h1> that skips a level.
+const normalizeHeadings = (html: string) => (/<h3/i.test(html) && !/<h2/i.test(html) ? html.replace(/<(\/?)h3/gi, "<$1h2") : html);
+
 const autoLinkUrls = (html: string) =>
   html.replace(/(<[^>]+>)|((https?:\/\/)[^\s<]+)/gi, (match, tag) =>
     tag ? tag : `<a href="${match}" target="_blank" rel="noopener noreferrer">${match}</a>`
@@ -74,8 +77,8 @@ const ArticlePage = () => {
 
   // Sanitize article HTML content
   const sanitizedContent = article
-    ? DOMPurify.sanitize(
-        convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`))),
+    ? (typeof window === "undefined" ? (x: string) => x : DOMPurify.sanitize.bind(DOMPurify))(
+        normalizeHeadings(convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`)))),
         { ADD_ATTR: ['target'] }
       )
     : "";
@@ -100,6 +103,7 @@ const ArticlePage = () => {
       />
 
       <Masthead />
+      <main>
 
       {/* Back link */}
       <div className="container mx-auto px-6 pt-8">
@@ -123,8 +127,11 @@ const ArticlePage = () => {
           <div className="w-full max-h-[75vh] flex justify-center items-center group overflow-hidden">
             <img
               src={article.image}
+              srcSet={srcSetFor(article.image)}
+              sizes="(max-width: 900px) 100vw, 900px"
               alt={article.title}
               decoding="async"
+              fetchPriority="high"
               className="w-full h-auto max-h-[75vh] object-contain transition-transform duration-700 group-hover:scale-[1.02]"
             />
           </div>
@@ -174,6 +181,7 @@ const ArticlePage = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleCopyLink}
+              aria-label="Copy link"
               className="w-9 h-9 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary transition-all"
               title="Copy link"
             >
@@ -229,6 +237,7 @@ const ArticlePage = () => {
         </section>
       )}
 
+      </main>
       <Footer />
     </div>
   );

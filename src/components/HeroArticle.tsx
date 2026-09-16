@@ -1,3 +1,4 @@
+import { srcSetFor } from "@/lib/articles";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -57,9 +58,12 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
           <motion.div className="absolute inset-0 scale-110" style={{ y: imageY }}>
               <img
                 src={article.image}
+                srcSet={srcSetFor(article.image)}
+                sizes="100vw"
                 alt={article.title}
                 className="w-full h-full object-cover object-[center_20%]"
                 loading="eager"
+                fetchPriority="high"
               />
           </motion.div>
         </motion.div>
@@ -131,6 +135,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
               {articles.map((_, i) => (
                 <button
                   key={i}
+                  aria-label={`Show story ${i + 1}`}
                   onMouseEnter={() => setCurrent(i)}
                   onClick={() => setCurrent(i)}
                   className="group py-2 px-1 focus:outline-none"

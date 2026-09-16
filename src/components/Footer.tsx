@@ -31,13 +31,13 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {/* Categories */}
           <div className="col-span-2">
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/25 font-body mb-5">Sections</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 font-body mb-5">Sections</h4>
             <nav className="grid grid-cols-2 gap-x-8 gap-y-3">
               {categories.map((cat) => (
                 <Link
                   key={cat}
                   to={`/category/${cat.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="text-sm text-white/45 hover:text-primary transition-colors font-body inline-flex items-center gap-1 group"
+                  className="text-sm text-white/75 hover:text-primary transition-colors font-body inline-flex items-center gap-1 group"
                 >
                   {cat}
                   <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -48,22 +48,22 @@ const Footer = () => {
 
           {/* Company */}
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/25 font-body mb-5">Company</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 font-body mb-5">Company</h4>
             <nav className="flex flex-col gap-3">
-              <Link to="/about" className="text-sm text-white/45 hover:text-primary transition-colors font-body">About</Link>
-              <Link to="/contact" className="text-sm text-white/45 hover:text-primary transition-colors font-body">Contact</Link>
-              <Link to="/privacy" className="text-sm text-white/45 hover:text-primary transition-colors font-body">Privacy Policy</Link>
+              <Link to="/about" className="text-sm text-white/75 hover:text-primary transition-colors font-body">About</Link>
+              <Link to="/contact" className="text-sm text-white/75 hover:text-primary transition-colors font-body">Contact</Link>
+              <Link to="/privacy" className="text-sm text-white/75 hover:text-primary transition-colors font-body">Privacy Policy</Link>
             </nav>
           </div>
 
           {/* Social */}
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/25 font-body mb-5">Connect</h4>
+            <h4 className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/60 font-body mb-5">Connect</h4>
             <a
               href="https://www.instagram.com/therecapreport/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 text-white/45 hover:text-primary transition-colors font-body text-sm group"
+              className="inline-flex items-center gap-3 text-white/75 hover:text-primary transition-colors font-body text-sm group"
             >
               <span className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-primary group-hover:bg-primary/10 transition-all">
                 <Instagram size={16} />
@@ -74,7 +74,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-20 pt-8 border-t border-white/8 flex items-center justify-center">
-          <p className="text-[11px] text-white/20 font-body uppercase tracking-[0.15em]">
+          <p className="text-[11px] text-white/60 font-body uppercase tracking-[0.15em]">
             © 2026 The Recap Report. All rights reserved.
           </p>
         </div>

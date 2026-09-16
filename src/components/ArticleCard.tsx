@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import { type Article, getExcerpt } from "@/lib/articles";
+import { type Article, getExcerpt, srcSetFor } from "@/lib/articles";
 
 interface ArticleCardProps {
   article: Article;
@@ -49,6 +49,8 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
               <div className="relative overflow-hidden aspect-[4/3] md:aspect-auto">
                 <img
                   src={article.image}
+                  srcSet={srcSetFor(article.image)}
+                  sizes="(max-width: 768px) 100vw, 640px"
                   alt={article.title}
                   className="w-full h-full object-cover object-top ken-burns-img"
                   loading="lazy"
@@ -88,6 +90,8 @@ const ArticleCard = ({ article, index, variant = "default" }: ArticleCardProps) 
           <div className="relative overflow-hidden aspect-[4/3]">
             <img
               src={article.image}
+              srcSet={srcSetFor(article.image)}
+              sizes="(max-width: 768px) 100vw, 480px"
               alt={article.title}
               className="w-full h-full object-cover object-top ken-burns-img"
               loading="lazy"

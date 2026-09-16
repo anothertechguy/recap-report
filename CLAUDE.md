@@ -39,3 +39,22 @@ The user typically supplies raw text and image files. Follow
 - `npm test` is broken (vitest not installed) — don't rely on it.
 - The newsletter signup form is cosmetic; it does not store emails.
 - `src/pages export from real site/` is dead reference data, not imported.
+
+## Build & performance (added 2026-09-16 — read before touching images or routes)
+- `npm run build` = `vite build` → `vite build --ssr src/entry-server.tsx` → `scripts/prerender.mjs`.
+  On Cloudflare builds (`CF_PAGES=1`) every route — home, categories, all articles, about/contact/
+  privacy — is pre-rendered to real HTML with its own title/description/OG image, plus sitemap.xml;
+  `src/main.tsx` hydrates. GitHub Pages staging still client-renders (prerender skips without CF_PAGES).
+  `App.tsx` exports `Providers` + `AppRoutes` for this; add routes in BOTH `AppRoutes` and
+  `entry-server.tsx#routes()`.
+- Nothing may touch `window`/`document` during render (effects only). `DOMPurify` is browser-only, so
+  ArticlePage passes content through untouched at build time and sanitizes on hydration.
+- **Images: every referenced png/jpg needs an `-800` sibling** (`sips -Z 800 file --out name-800.ext`)
+  because `srcSetFor()` in `src/lib/articles.ts` points every `<img>` at it for phones.
+  `node scripts/check-articles.cjs` fails if one is missing. Keep originals ≤ 1600px JPEG (q82);
+  the 9/16 pass converted the multi-MB PNG photos to JPEG and re-pointed `articles.ts`.
+- Fonts are async (`media="print" onload`), hero/article images carry `fetchPriority="high"`, cards lazy.
+- Accessibility rules that were fixed 9/16 and must not regress: icon buttons need `aria-label`,
+  footer/newsletter fine print no lighter than `text-white/60`, category chips use the darker red
+  `bg-[hsl(0_78%_38%)]`, `<main>` wraps page content, article bodies never start at `<h3>` without an
+  `<h2>` (normalizeHeadings handles it).

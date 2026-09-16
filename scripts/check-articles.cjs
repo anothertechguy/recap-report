@@ -34,3 +34,14 @@ for (const u of imgUrls) {
 
 console.log(`\narticles: ${ids.length} | image refs: ${imgUrls.length} (${missing} missing) | errors: ${errors}`);
 process.exit(errors ? 1 : 0);
+
+// -800 variant check: every referenced png/jpg must have an 800px sibling (public/images/<x>-800.<ext>)
+// because the site's <img srcset> points at it. Make one with:  sips -Z 800 <file> --out <name>-800.<ext>
+try {
+  const fs = require("fs"), path = require("path");
+  const src = fs.readFileSync(path.join(__dirname, "..", "src", "lib", "articles.ts"), "utf8");
+  const refs = [...new Set([...src.matchAll(/https:\/\/therecapreport\.com\/wp-content\/uploads\/([^"'\s)]+\.(?:png|jpe?g))/gi)].map(m => m[1]))];
+  const missing = refs.filter(r => !fs.existsSync(path.join(__dirname, "..", "public", "images", r.replace(/\.(png|jpe?g)$/i, "-800.$1"))));
+  if (missing.length) { console.error(`✗ ${missing.length} image(s) have no -800 variant (srcset would 404 on phones):\n  ` + missing.slice(0, 10).join("\n  ")); process.exitCode = 1; }
+  else console.log(`✓ -800 image variants present for all ${refs.length} referenced images`);
+} catch (e) { console.error("variant check failed:", e.message); }
