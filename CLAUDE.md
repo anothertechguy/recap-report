@@ -53,6 +53,14 @@ The user typically supplies raw text and image files. Follow
   because `srcSetFor()` in `src/lib/articles.ts` points every `<img>` at it for phones.
   `node scripts/check-articles.cjs` fails if one is missing. Keep originals ≤ 1600px JPEG (q82);
   the 9/16 pass converted the multi-MB PNG photos to JPEG and re-pointed `articles.ts`.
+- **Every local image gets intrinsic width/height** from `src/lib/image-dims.ts` (generated: run
+  `node scripts/image-dims.cjs` after adding images). ArticlePage uses it for the hero and every inline
+  `<img>` in article HTML — this is what took the article page from CLS 0.54 to 0 on 9/16.
+- Routes pre-render to flat files (`dist/about.html`, `dist/article/<slug>.html`) so Cloudflare serves
+  the app's slash-less URLs directly — no 308 to a trailing slash. Sitemap/canonicals are slash-less too.
+- Page-load `motion` wrappers above the fold use `initial={false}` (hero, carousel, article): a hidden
+  `initial` state is baked into the pre-rendered HTML and delays LCP / shifts layout until hydration.
+  Below-the-fold `whileInView` animations are fine. Third-party TradingView ticker injects after `load` + idle.
 - Fonts are async (`media="print" onload`), hero/article images carry `fetchPriority="high"`, cards lazy.
 - Accessibility rules that were fixed 9/16 and must not regress: icon buttons need `aria-label`,
   footer/newsletter fine print no lighter than `text-white/60`, category chips use the darker red

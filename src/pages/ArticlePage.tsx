@@ -4,12 +4,22 @@ import { ArrowLeft, Mail, Calendar, Share2, Link2, ArrowUpRight } from "lucide-r
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
 import { articles, srcSetFor } from "@/lib/articles";
+import { imageDims } from "@/lib/image-dims";
 import Masthead from "@/components/Masthead";
 import Footer from "@/components/Footer";
 import ArticleCard from "@/components/ArticleCard";
 
 /** Wrap plain-text URLs in <a> tags — only in text nodes, never inside HTML attributes */
 // WordPress bodies often start at <h3>; with the page's <h1> that skips a level.
+/** Intrinsic width/height on every known local <img> so images never shift layout as they load. */
+const dimsFor = (src: string) => imageDims[decodeURIComponent(src.replace(/^https?:\/\/[^/]+/, ""))];
+const sizeInlineImages = (html: string) =>
+  html.replace(/<img\b([^>]*?)\ssrc="([^"]+)"([^>]*)>/gi, (m, pre, src, post) => {
+    if (/\swidth=/.test(pre + post)) return m;
+    const d = dimsFor(src);
+    return d ? `<img${pre} src="${src}" width="${d[0]}" height="${d[1]}"${post}>` : m;
+  });
+
 const normalizeHeadings = (html: string) => (/<h3/i.test(html) && !/<h2/i.test(html) ? html.replace(/<(\/?)h3/gi, "<$1h2") : html);
 
 const autoLinkUrls = (html: string) =>
@@ -78,7 +88,7 @@ const ArticlePage = () => {
   // Sanitize article HTML content
   const sanitizedContent = article
     ? (typeof window === "undefined" ? (x: string) => x : DOMPurify.sanitize.bind(DOMPurify))(
-        normalizeHeadings(convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`)))),
+        sizeInlineImages(normalizeHeadings(convertShortBoldsToHeadings(autoLinkUrls(stripLeadingDate(article.content || `<p>${article.excerpt}</p>`))))),
         { ADD_ATTR: ['target'] }
       )
     : "";
@@ -128,6 +138,8 @@ const ArticlePage = () => {
             <img
               src={article.image}
               srcSet={srcSetFor(article.image)}
+              width={dimsFor(article.image)?.[0]}
+              height={dimsFor(article.image)?.[1]}
               sizes="(max-width: 900px) 100vw, 900px"
               alt={article.title}
               decoding="async"
