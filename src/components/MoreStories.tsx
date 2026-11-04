@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { type Article, getExcerpt } from "@/lib/articles";
+import { type Article, getExcerpt, srcSetFor } from "@/lib/articles";
 
 interface MoreStoriesProps {
   articles: Article[];
@@ -74,6 +74,8 @@ const MoreStories = ({ articles }: MoreStoriesProps) => {
                   <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden flex-shrink-0 shadow-sm ring-1 ring-border/50 group-hover:ring-primary/30 transition-all duration-500" style={{ perspective: "600px" }}>
                     <img
                       src={article.image}
+                      srcSet={srcSetFor(article.image)}
+                      sizes="(max-width: 768px) 100vw, 400px"
                       alt={article.title}
                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                       loading="lazy"

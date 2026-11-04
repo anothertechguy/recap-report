@@ -149,6 +149,7 @@ const Masthead = () => {
                   className="flex-1 bg-transparent text-2xl md:text-4xl font-headline font-medium text-foreground placeholder:text-muted-foreground outline-none"
                 />
                 <button
+                  aria-label="Close search"
                   onClick={() => {
                     setSearchOpen(false);
                     setSearchQuery("");

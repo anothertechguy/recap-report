@@ -1,3 +1,4 @@
+import { srcSetFor } from "@/lib/articles";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
@@ -26,6 +27,8 @@ const CultureSpotlight = ({ article }: CultureSpotlightProps) => {
       <motion.div className="absolute inset-0" style={{ y: bgY, willChange: "transform" }}>
         <img
           src={article.image}
+          srcSet={srcSetFor(article.image)}
+          sizes="100vw"
           alt=""
           className="w-full h-[130%] object-cover"
           loading="lazy"

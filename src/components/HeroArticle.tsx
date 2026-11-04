@@ -1,3 +1,4 @@
+import { srcSetFor } from "@/lib/articles";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
@@ -37,7 +38,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
   return (
     <motion.section
       ref={ref}
-      initial={{ opacity: 0 }}
+      initial={false}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, ease: [0.2, 0.8, 0.2, 1] }}
       className="relative w-full h-[85vh] md:h-[90vh] overflow-hidden bg-black"
@@ -47,7 +48,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
       <AnimatePresence mode="wait">
         <motion.div
           key={current}
-          initial={{ opacity: 0 }}
+          initial={current === 0 ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
@@ -57,9 +58,12 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
           <motion.div className="absolute inset-0 scale-110" style={{ y: imageY }}>
               <img
                 src={article.image}
+                srcSet={srcSetFor(article.image)}
+                sizes="100vw"
                 alt={article.title}
                 className="w-full h-full object-cover object-[center_20%]"
                 loading="eager"
+                fetchPriority="high"
               />
           </motion.div>
         </motion.div>
@@ -93,7 +97,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
             <AnimatePresence mode="wait">
               <motion.div
                 key={`content-${current}`}
-                initial={{ opacity: 0, y: 20 }}
+                initial={current === 0 ? false : { opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
@@ -131,6 +135,7 @@ const HeroArticle = ({ articles }: HeroArticleProps) => {
               {articles.map((_, i) => (
                 <button
                   key={i}
+                  aria-label={`Show story ${i + 1}`}
                   onMouseEnter={() => setCurrent(i)}
                   onClick={() => setCurrent(i)}
                   className="group py-2 px-1 focus:outline-none"
