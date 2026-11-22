@@ -73,9 +73,18 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-20 pt-8 border-t border-white/8 flex items-center justify-center">
+        <div className="mt-20 pt-8 border-t border-white/8 flex flex-col items-center justify-center gap-2 text-center">
           <p className="text-[11px] text-white/60 font-body uppercase tracking-[0.15em]">
             © 2026 The Recap Report. All rights reserved.
+          </p>
+          <p className="text-[11px] text-white/60 font-body uppercase tracking-[0.15em]">
+            Site by{" "}
+            <a
+              href="https://easycheapwebsites.com/"
+              className="underline underline-offset-2 hover:text-primary transition-colors"
+            >
+              Easy Cheap Websites
+            </a>
           </p>
         </div>
       </div>
